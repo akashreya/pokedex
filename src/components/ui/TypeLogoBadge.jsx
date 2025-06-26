@@ -1,0 +1,15 @@
+import React from "react";
+
+export default function TypeLogoBadge({ type }) {
+  return (
+    <span className={`pokemon-card-type bg-type-solid-${type}`}>
+      <img
+        src={`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${type}.svg`}
+        alt={type}
+        className="w-5 h-5 block mx-auto my-auto"
+        loading="lazy"
+        title={type.charAt(0).toUpperCase() + type.slice(1)}
+      />
+    </span>
+  );
+}

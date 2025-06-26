@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+- **Pokémon Image Selection Rule**
+  - When displaying a Pokémon image (e.g., in cards, listings, or details), always use the following priority:
+    1. `sprites.other.dream_world.front_default` (SVG, best quality)
+    2. If that is null, use `sprites.other.home.front_default` (high-res PNG)
+    3. If both are null, fall back to `sprites.front_default` (classic sprite)
+  - **Example:**
+    ```js
+    const img =
+      pokemon.sprites.other.dream_world.front_default ||
+      pokemon.sprites.other.home.front_default ||
+      pokemon.sprites.front_default;
+    ```
+  - This ensures the best available artwork is always shown, improving visual quality and consistency.
+
+- **Applies to:**
+  - All Pokémon card, grid, and detail components
+  - Any new feature or section that displays Pokémon images
+
+- **Rationale:**
+  - Dream World SVGs are scalable and visually appealing
+  - Home PNGs are high-res and modern
+  - Classic sprites are a last-resort fallback
+
