@@ -117,6 +117,8 @@ temp/
 
 # Taskmaster files (if using task management)
 .taskmaster/
+.windsurfrules
+.roomodes
 
 # API keys and sensitive data
 *.key
