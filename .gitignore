@@ -160,4 +160,8 @@ workbox-*.js
 .sentryclirc
 
 # Local development
-.local 
+.local
+
+# Custom files
+.roomodes
+.windsurf 
