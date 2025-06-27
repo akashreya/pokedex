@@ -15,9 +15,9 @@ export default function PokemonCardList({ pokemon, index = 0 }) {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
-          duration: 0.4,
-          delay: index * 0.3,
-          scale: { type: "spring", visualDuration: index * 0.3, bounce: 0.5 },
+          duration: 0.3,
+          delay: index * 0.1,
+          scale: { type: "spring", visualDuration: index * 0.1, bounce: 0.5 },
         }}
         whileHover={{ y: -3, transition: { duration: 0.2 } }}
       >
@@ -40,8 +40,6 @@ export default function PokemonCardList({ pokemon, index = 0 }) {
             <TypeLogoBadge key={type.type.name} type={type.type.name} />
           ))}
         </div>
-
-        {/* Optionally add a chevron or more info here */}
       </motion.div>
     </Link>
   );

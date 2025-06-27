@@ -89,15 +89,15 @@ export const REGIONS = [
     mascots: [
       {
         name: "Chespin",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/650.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/650.png",
       },
       {
         name: "Fennekin",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/653.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/653.png",
       },
       {
         name: "Froakie",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/656.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/656.png",
       },
     ],
   },
@@ -106,15 +106,15 @@ export const REGIONS = [
     mascots: [
       {
         name: "Rowlet",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/722.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/722.png",
       },
       {
         name: "Litten",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/725.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/725.png",
       },
       {
         name: "Popplio",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/728.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/728.png",
       },
     ],
   },
@@ -123,32 +123,15 @@ export const REGIONS = [
     mascots: [
       {
         name: "Grookey",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/810.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/810.png",
       },
       {
         name: "Scorbunny",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/813.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/813.png",
       },
       {
         name: "Sobble",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/816.png",
-      },
-    ],
-  },
-  {
-    name: "Hisui",
-    mascots: [
-      {
-        name: "Rowlet",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/722.png",
-      },
-      {
-        name: "Cyndaquil",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/155.svg",
-      },
-      {
-        name: "Oshawott",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/501.svg",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/816.png",
       },
     ],
   },
@@ -157,15 +140,15 @@ export const REGIONS = [
     mascots: [
       {
         name: "Sprigatito",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/906.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/906.png",
       },
       {
         name: "Fuecoco",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/909.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/909.png",
       },
       {
         name: "Quaxly",
-        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/912.png",
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/912.png",
       },
     ],
   },
