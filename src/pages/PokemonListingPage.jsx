@@ -253,6 +253,11 @@ export default function PokemonListing() {
     localStorage.setItem("pokemonPage", currentPage);
   }, [currentPage]);
 
+  // Scroll to top when pagination changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   return (
     <section className="flex flex-col">
       {/* Header */}

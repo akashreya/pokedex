@@ -88,7 +88,7 @@ export default function PokemonHeader({
           </button>
         )}
       </div>
-      <div className="relative w-125 h-125">
+      <div className="relative w-100 h-100">
         <motion.img
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

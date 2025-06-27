@@ -29,6 +29,8 @@ export default function PokemonDetailPage() {
   const isFirstRender = useRef(true);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchEndY = useRef<number | null>(null);
 
   // Tab configuration
   const TAB_ITEMS = ["about", "stats", "moves", "evolution"];
@@ -89,14 +91,22 @@ export default function PokemonDetailPage() {
   // Swipe handlers
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
   }
   function handleTouchMove(e: React.TouchEvent) {
     touchEndX.current = e.touches[0].clientX;
+    touchEndY.current = e.touches[0].clientY;
   }
   function handleTouchEnd() {
-    if (touchStartX.current !== null && touchEndX.current !== null) {
+    if (
+      touchStartX.current !== null &&
+      touchEndX.current !== null &&
+      touchStartY.current !== null &&
+      touchEndY.current !== null
+    ) {
       const dx = touchEndX.current - touchStartX.current;
-      if (Math.abs(dx) > 60) {
+      const dy = touchEndY.current - touchStartY.current;
+      if (Math.abs(dx) > 60 && Math.abs(Math.abs(dx)) > Math.abs(dy) * 1.5) {
         if (dx < 0 && pokemon.id < 1010) {
           goToNext();
         } else if (dx > 0 && pokemon.id > 1) {
@@ -106,6 +116,8 @@ export default function PokemonDetailPage() {
     }
     touchStartX.current = null;
     touchEndX.current = null;
+    touchStartY.current = null;
+    touchEndY.current = null;
   }
 
   // Reset tab and sprite when new Pokémon is loaded
