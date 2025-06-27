@@ -22,7 +22,7 @@ export default function RegionalPokedex() {
           items={REGIONS}
           renderItem={renderRegion}
           autoPlayInterval={7000}
-          className="w-full max-w-3xl mx-auto min-h-[200px] hover:scale-110"
+          className="w-full max-w-3xl mx-auto min-h-[200px] hover:scale-110 transition-all duration-200"
           slideClassName="px-4"
           showNavButtons={false}
           showDotIndicators={false}
@@ -35,7 +35,7 @@ export default function RegionalPokedex() {
           dark:bg-gradient-to-br dark:from-[#434343] dark:via-[#152331] dark:to-[#000000]
           font-poppins
           shadow-sm shadow-blue-900 dark:shadow-amber-400 font-poppins
-          hover:scale-110 transition-colors duration-200"
+          hover:scale-110 transition-all duration-200"
         >
           Browse by Region
         </Link>

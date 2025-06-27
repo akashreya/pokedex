@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import LoadingSpinner from "../components/layout/LoadingSpinner";
 import { usePokemons } from "@/hooks/usePokemons";
 import { usePokemonContext } from "@/context/PokemonContext";
@@ -80,6 +80,9 @@ export default function PokemonListing() {
   const [currentPage, setCurrentPage] = useState(persisted.currentPage);
   const gridItemsPerPage = 10;
   const listItemsPerPage = 50;
+
+  // Ref for header
+  const mainRef = useRef(null);
 
   // Use context and hook
   const {
@@ -255,13 +258,18 @@ export default function PokemonListing() {
 
   // Scroll to top when pagination changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }, [currentPage]);
 
   return (
     <section className="flex flex-col">
       {/* Header */}
-      <header className="relative flex shrink-0 items-center justify-center p-4">
+      <header
+        className="relative flex shrink-0 items-center justify-center p-4"
+        ref={mainRef}
+      >
         <img
           src="/Pokémon_logo.svg"
           alt="Pokemon Logo"
