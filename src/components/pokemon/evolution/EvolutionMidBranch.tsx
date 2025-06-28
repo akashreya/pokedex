@@ -199,7 +199,7 @@ export default function EvolutionMidBranch({
                       )}
                     </div>
                   </div>
-                  <div className="ev-details justify-start min-w-[120px]">
+                  <div className="evo-details justify-start min-w-[120px]">
                     <Link
                       to={`/pokemon/${name}`}
                       className="evo-name hover:text-blue-500 transition-colors"
