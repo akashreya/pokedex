@@ -11,7 +11,7 @@ export default function EvolutionSingleStage({
 }: EvolutionSingleStageProps) {
   return (
     <>
-      <div className="flex items-center justify-center mb-4">
+      <div className="evolution-inner-panel mb-4">
         <motion.div
           className="text-gray-600 flex items-center gap-2"
           initial={{ opacity: 0 }}

@@ -72,10 +72,9 @@ export default function EvolutionMidBranch({
 
   return (
     <div
-      className={`flex flex-col md:flex-row items-center ${
+      className={`evolution-inner-panel ${
         evolutionPath.next.length > 1 ? "" : "md:items-start "
-      } 
-      justify-center gap-4`}
+      } `}
     >
       {/* Previous evolution path */}
       {evolutionPath.previous.length > 0 && (
@@ -88,29 +87,26 @@ export default function EvolutionMidBranch({
             return (
               <Fragment key={name}>
                 {idx > 0 && <EvolutionArrow color="gray-400" />}
-                <div className="flex flex-col items-center min-h-[200px]">
-                  <div className="flex-shrink-0">
-                    <div
-                      className={`w-50 h-50 rounded-full shadow-lg shadow-black
-                     bg-gradient-to-r ${gradientClass}`}
-                    >
+                <div className="evolution-sprite-outer-panel">
+                  <div className="evo-single-sprite-panel">
+                    <div className={`evo-image-panel ${gradientClass}`}>
                       {isLoading ? (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                        <div className="evo-loading-panel">
+                          <div className="evo-spinner"></div>
                         </div>
                       ) : (
                         <img
                           src={getSpriteUrl(pokemonData)}
                           alt={name}
-                          className="w-full h-full object-contain drop-shadow-md"
+                          className="evo-image"
                         />
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col items-center justify-start mt-4 min-w-[120px]">
+                  <div className="evo-details justify-start  min-w-[120px] mt-4">
                     <Link
                       to={`/pokemon/${name}`}
-                      className="capitalize font-semibold text-xl text-gray-600 text-center hover:text-blue-500 transition-colors"
+                      className="evo-name text-center hover:text-blue-500 transition-colors"
                     >
                       {name}
                     </Link>
@@ -131,7 +127,7 @@ export default function EvolutionMidBranch({
       )}
       <EvolutionArrow />
       {/* Target Pokémon */}
-      <div className="flex flex-col items-center min-h-[200px] p-2">
+      <div className="evolution-sprite-outer-panel p-2">
         {(() => {
           const pokemonData = pokemonCache[pokemonName];
           const isLoading = !pokemonData;
@@ -139,27 +135,25 @@ export default function EvolutionMidBranch({
 
           return (
             <>
-              <div className="flex-shrink-0">
+              <div className="evo-single-sprite-panel">
                 <div
-                  className={`w-50 h-50 rounded-full shadow-lg bg-gradient-to-r ${gradientClass} shadow-black ring-3 ring-blue-400 p-2`}
+                  className={`evo-image-panel ${gradientClass} shadow-black ring-3 ring-blue-400 p-2`}
                 >
                   {isLoading ? (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                    <div className="evo-loading-panel">
+                      <div className="evo-spinner"></div>
                     </div>
                   ) : (
                     <img
                       src={getSpriteUrl(pokemonData)}
                       alt={pokemonName}
-                      className="w-full h-full object-contain drop-shadow-lg"
+                      className="evo-image"
                     />
                   )}
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-start mt-4 min-w-[120px]">
-                <span className="capitalize text-gray-600 font-semibold text-xl text-center">
-                  {pokemonName}
-                </span>
+              <div className="evo-details justify-start min-w-[120px]">
+                <span className="evo-name">{pokemonName}</span>
                 <div className="pokemon-card-types mt-1">
                   {pokemonData?.types?.map((type: PokemonType) => (
                     <TypeLogoBadge key={type.type.name} type={type.type.name} />
@@ -168,7 +162,7 @@ export default function EvolutionMidBranch({
                 {(() => {
                   const prevDetail = getPrevEvolutionDetail(0);
                   return prevDetail ? (
-                    <div className="mt-2 text-center bg-white/50 px-2 py-1 rounded-full text-xs">
+                    <div className="evo-trigger-details">
                       <EvolutionDescription evolutionDetail={prevDetail} />
                     </div>
                   ) : null;
@@ -189,28 +183,26 @@ export default function EvolutionMidBranch({
             return (
               <div key={name} className="flex flex-row items-center">
                 <EvolutionArrow />
-                <div className="flex flex-col items-center min-h-[200px] ml-5">
-                  <div className="flex-shrink-0">
-                    <div
-                      className={`w-50 h-50 rounded-full shadow-lg shadow-black bg-gradient-to-r ${gradientClass}`}
-                    >
+                <div className="evolution-sprite-outer-panel ml-5">
+                  <div className="evo-single-sprite-panel">
+                    <div className={`evo-image-panel ${gradientClass}`}>
                       {isLoading ? (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                        <div className="evo-loading-panel">
+                          <div className="evo-spinner"></div>
                         </div>
                       ) : (
                         <img
                           src={getSpriteUrl(pokemonData)}
                           alt={name}
-                          className="w-full h-full object-contain drop-shadow-md"
+                          className="evo-image"
                         />
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col items-center justify-start mt-4 min-w-[120px]">
+                  <div className="ev-details justify-start min-w-[120px]">
                     <Link
                       to={`/pokemon/${name}`}
-                      className="capitalize font-semibold text-xl text-gray-600 hover:text-blue-500 transition-colors"
+                      className="evo-name hover:text-blue-500 transition-colors"
                     >
                       {name}
                     </Link>
@@ -223,7 +215,7 @@ export default function EvolutionMidBranch({
                       ))}
                     </div>
                     {evolutionDetail && (
-                      <div className="mt-2 text-center px-2 py-1 rounded-full text-xs">
+                      <div className="evo-trigger-details">
                         <EvolutionDescription
                           evolutionDetail={evolutionDetail}
                         />

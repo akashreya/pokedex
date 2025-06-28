@@ -28,34 +28,29 @@ export default function EvolutionTree({
     const gradientClass = getPokemonGradientClass(node.pokemonData);
     return (
       <div
-        className={`flex flex-col md:flex-row items-center 
-          ${
-            node.evolvesTo.length > 1 ? "" : "md:items-start"
-          }  justify-center gap-4`}
+        className={`evolution-inner-panel 
+          ${node.evolvesTo.length > 1 ? "" : "md:items-start"}  `}
       >
-        <div className="flex flex-col items-center min-h-[200px]">
-          <div className="flex-shrink-0">
+        <div className="evolution-sprite-outer-panel">
+          <div className="evo-single-sprite-panel">
             <div
-              className={`w-50 h-50 rounded-full shadow-lg shadow-black
-                bg-gradient-to-r ${gradientClass}
+              className={`evo-image-panel ${gradientClass}
               ${isTarget ? "ring-3 ring-blue-400 p-2" : ""}`}
             >
               <img
                 src={getSpriteUrl(node.pokemonData)}
                 alt={node.name}
-                className="w-full h-full object-contain drop-shadow-md"
+                className="evo-image"
               />
             </div>
           </div>
-          <div className="flex flex-col items-center mt-4">
+          <div className="evo-details">
             {isTarget ? (
-              <span className="capitalize font-semibold text-xl text-gray-600">
-                {node.name}
-              </span>
+              <span className="evo-name">{node.name}</span>
             ) : (
               <Link
                 to={`/pokemon/${node.name}`}
-                className="capitalize font-semibold text-xl text-gray-600 hover:text-blue-500 transition-colors"
+                className="evo-name transition-colors duration-200 hover:text-blue-500 "
               >
                 {node.name}
               </Link>
@@ -67,7 +62,7 @@ export default function EvolutionTree({
             </div>
             {/* Evolution description, if available */}
             {node.evolutionDetails && node.evolutionDetails[0] && (
-              <div className="mt-2 text-center backdrop-blur px-2 py-1 rounded-full text-xs">
+              <div className="evo-trigger-details">
                 <EvolutionDescription
                   evolutionDetail={node.evolutionDetails[0]}
                 />
@@ -77,13 +72,13 @@ export default function EvolutionTree({
         </div>
         {node.evolvesTo.length > 0 && (
           <>
-            <div className="flex items-center h-[200px]">
+            <div className="evo-arrow">
               <EvolutionArrow />
             </div>
             {node.evolvesTo.length === 1 ? (
               renderEvolutionTree(node.evolvesTo[0])
             ) : (
-              <div className="flex flex-col items-center">
+              <div className="hero-content">
                 {node.evolvesTo.map((evo: EvolutionNode, idx: number) => (
                   <div key={evo.name + idx}>{renderEvolutionTree(evo)}</div>
                 ))}

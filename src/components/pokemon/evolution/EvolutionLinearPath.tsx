@@ -28,7 +28,7 @@ export default function EvolutionLinearPath({
   const pokemonCache = useMultiplePokemon(evolutionPath);
 
   return (
-    <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-4">
+    <div className="evolution-inner-panel md:items-start">
       {evolutionPath.map((name, idx) => {
         const isCurrent = name === pokemonName;
         const pokemonData = pokemonCache[name];
@@ -39,35 +39,32 @@ export default function EvolutionLinearPath({
         return (
           <Fragment key={name}>
             {idx > 0 && <EvolutionArrow />}
-            <div className="flex flex-col items-center min-h-[200px]">
-              <div className="flex-shrink-0">
+            <div className="evolution-sprite-outer-panel">
+              <div className="evo-single-sprite-panel">
                 <div
-                  className={`w-50 h-50 rounded-full shadow-lg shadow-black
-                     bg-gradient-to-t ${gradientClass}
+                  className={`evo-image-panel ${gradientClass}
                      ${isCurrent ? "ring-3 ring-blue-400" : ""}`}
                 >
                   {isLoading ? (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                    <div className="evo-loading-panel">
+                      <div className="evo-spinner"></div>
                     </div>
                   ) : (
                     <img
                       src={getSpriteUrl(pokemonData)}
                       alt={name}
-                      className="w-full h-full object-contain"
+                      className="evo-image"
                     />
                   )}
                 </div>
               </div>
-              <div className="flex flex-col items-center mt-4">
+              <div className="evo-details">
                 {isCurrent ? (
-                  <span className="capitalize font-semibold text-xl text-gray-600">
-                    {name}
-                  </span>
+                  <span className="evo-name">{name}</span>
                 ) : (
                   <Link
                     to={`/pokemon/${name}`}
-                    className="capitalize font-semibold text-xl text-gray-600 hover:text-blue-500 transition-colors"
+                    className="evo-name hover:text-blue-500 transition-colors duration-200"
                   >
                     {name}
                   </Link>
@@ -79,7 +76,7 @@ export default function EvolutionLinearPath({
                 </div>
                 {/* Render evolution description if available */}
                 {evolutionDetails && evolutionDetails[idx] && (
-                  <div className="mt-2 text-center backdrop-blur px-2 py-1 rounded-full text-xs">
+                  <div className="evo-trigger-details">
                     <EvolutionDescription
                       evolutionDetail={evolutionDetails[idx]}
                     />

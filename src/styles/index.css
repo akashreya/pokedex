@@ -624,6 +624,41 @@
   .poke-about-panel {
     @apply grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-8 text-gray-800;
   }
+
+  .evolution-inner-panel {
+    @apply flex flex-col md:flex-row items-center justify-center gap-4;
+  }
+
+  .evolution-sprite-outer-panel {
+    @apply flex flex-col items-center min-h-[200px];
+  }
+  .evo-single-sprite-panel {
+    @apply flex-shrink-0;
+  }
+  .evo-image-panel {
+    @apply w-50 h-50 rounded-full shadow-lg shadow-black bg-gradient-to-r;
+  }
+  .evo-image {
+    @apply w-full h-full object-contain drop-shadow-md;
+  }
+  .evo-loading-panel {
+    @apply w-full h-full flex items-center justify-center;
+  }
+  .evo-spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500;
+  }
+  .evo-details {
+    @apply flex flex-col items-center mt-4;
+  }
+  .evo-name {
+    @apply capitalize font-semibold text-xl text-gray-600;
+  }
+  .evo-trigger-details {
+    @apply mt-2 text-center backdrop-blur px-2 py-1 rounded-full text-xs;
+  }
+  .evo-arrow {
+    @apply flex items-center h-[200px];
+  }
 }
 
 @theme inline {
