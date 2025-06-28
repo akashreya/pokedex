@@ -37,7 +37,7 @@ testOddishEvolution();
 
 console.log("Testing getRelevantEvolutionPath for Oddish...");
 try {
-  const { getRelevantEvolutionPath } = require("./services/evolutionService");
+  const { getRelevantEvolutionPath } = require("../evolutionService");
 
   // Test with Oddish ID (43)
   const evolutionPath = await getRelevantEvolutionPath(43);

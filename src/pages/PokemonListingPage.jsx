@@ -264,18 +264,11 @@ export default function PokemonListing() {
   }, [currentPage]);
 
   return (
-    <section className="flex flex-col">
+    <section className="pokemonlisting-section">
       {/* Header */}
-      <header
-        className="relative flex shrink-0 items-center justify-center p-4"
-        ref={mainRef}
-      >
-        <img
-          src="/Pokémon_logo.svg"
-          alt="Pokemon Logo"
-          className="w-[20%] md:w-[6%]"
-        />
-        <div className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-end gap-4">
+      <header className="listing-header" ref={mainRef}>
+        <img src="/Pokémon_logo.svg" alt="Pokemon Logo" />
+        <div className="list-toggler">
           <ToggleSwitch
             checked={viewMode === "list"}
             onChange={(checked) => setViewMode(checked ? "list" : "grid")}
@@ -286,12 +279,12 @@ export default function PokemonListing() {
       </header>
 
       {/* Main content area including sidebar and list */}
-      <main className="relative flex">
+      <main className="list-main">
         {/* Sidebar: always visible on desktop, overlay on mobile */}
         <aside
-          className={`${
+          className={`md:block fixed md:relative top-15 left-0 h-3/4 w-72 z-50 md:z-auto ${
             sidebarOpen ? "block" : "hidden"
-          } md:block fixed md:relative top-15 left-0 h-3/4 w-72 z-50 md:z-auto`}
+          }`}
         >
           <FilterSidebar
             selectedTypes={selectedTypes}
@@ -312,17 +305,16 @@ export default function PokemonListing() {
         {/* Mobile backdrop overlay */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+            className="list-sidebar-mobile"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
         {/* List Area */}
-        <div className="flex-1 flex-col p-4 flex">
-          <div className="flex items-center justify-between mb-4">
+        <div className="list-area">
+          <div className="list-hamburger-sort-panel">
             {/* Mobile Filter Button */}
             <button
-              className="rounded-md p-2 md:hidden"
               onClick={() => setSidebarOpen(true)}
               aria-label="Open filters"
             >
@@ -341,27 +333,20 @@ export default function PokemonListing() {
                 />
               </svg>
             </button>
-            <div className="flex-grow flex justify-end">
+            <div className="list-sort-controls">
               <SortControls sortBy={sortBy} onSortChange={setSortBy} />
             </div>
           </div>
 
           <div>
             {loading ? (
-              <div className="flex h-full items-center justify-center">
+              <div className="list-loading">
                 <LoadingSpinner />
               </div>
             ) : error ? (
-              <div className="flex h-full flex-col items-center justify-center text-red-500">
-                <p className="mb-2 text-lg font-semibold">
-                  Error loading Pokémon
-                </p>
-                <button
-                  onClick={() => fetchPokemonList()}
-                  className="rounded bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
-                >
-                  Retry
-                </button>
+              <div className="list-error">
+                <p>Error loading Pokémon</p>
+                <button onClick={() => fetchPokemonList()}>Retry</button>
               </div>
             ) : (
               <>
@@ -375,7 +360,7 @@ export default function PokemonListing() {
           </div>
 
           {totalPages >= 1 && !loading && !error && (
-            <div className="pt-4">
+            <div className="list-pagination-panel">
               <PaginationControls
                 currentPage={currentPage}
                 totalPages={totalPages}

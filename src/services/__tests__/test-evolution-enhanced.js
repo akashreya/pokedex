@@ -4,7 +4,7 @@
 import {
   getEvolutionChainForPokemon,
   getRelevantEvolutionPath,
-} from "./services/evolutionService.js";
+} from "../evolutionService.js";
 
 async function testEnhancedEvolutionService() {
   console.log(

@@ -13,14 +13,11 @@ import { AnimatePresence } from "framer-motion";
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
+      <div className="app">
         <ThemeProvider />
         <ScrollToTop />
         <Header />
-        <main
-          className="flex-1 bg-gradient-to-tr from-[#ec77ab] to-[#7873f5]
-        dark:bg-gradient-to-br dark:from-[#152331] dark:to-[#000000]"
-        >
+        <main className="main-container">
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<HomePage />} />
