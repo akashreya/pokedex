@@ -134,8 +134,7 @@ export default function PokemonDetailPage() {
         <LoadingSpinner />
       </div>
     );
-  if (error)
-    return <div className="py-8 text-center text-red-500">{error}</div>;
+  if (error) return <div className="loading-error">{error}</div>;
   if (!pokemon) return null;
 
   const type1 = pokemon.types[0].type.name;

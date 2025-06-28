@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getPokemonByIdOrName, Pokemon } from "../services/pokedexapi";
+import { Pokemon } from "../services/pokedexapi";
 import { fetchWithCache } from "../services/cache";
 import { throttleRequest } from "../services/throttle";
 

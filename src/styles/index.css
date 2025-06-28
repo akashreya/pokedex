@@ -117,16 +117,6 @@
 }
 
 @layer components {
-  .test-css-working {
-    @apply text-white p-4 rounded-lg;
-    background-color: red !important;
-  }
-
-  .test-tailwind-vars {
-    @apply text-white p-4 rounded-lg;
-    background-color: var(--color-red-500);
-  }
-
   .home-page {
     @apply w-full max-w-5xl mx-auto flex flex-col items-center;
   }
@@ -274,7 +264,7 @@
   }
 
   .loading-error {
-    @apply text-lg text-red-500;
+    @apply text-red-500 text-3xl font-bold py-8 text-center;
   }
   .pokemon-list {
     @apply w-full sm:w-1/2 md:w-3/4 min-h-[400px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
@@ -307,6 +297,10 @@
   }
   .pokemon-card-type {
     @apply px-2 py-1 rounded-full text-xs font-bold flex items-center justify-center w-8 h-8 aspect-square;
+  }
+
+  .pokemon-card-type img {
+    @apply w-5 h-5 block mx-auto my-auto;
   }
 
   .pokemon-card-rarity {
@@ -399,6 +393,46 @@
   }
   .pokemon-detail-tab-content {
     @apply bg-white/10 rounded-2xl p-6;
+  }
+  .not-found-page {
+    @apply container mx-auto py-8 text-center;
+  }
+  .not-found-page h1 {
+    @apply text-3xl font-bold mb-4;
+  }
+
+  .toggle-switch {
+    @apply flex items-center gap-2;
+  }
+
+  .toggle-switch-button {
+    @apply w-14 h-8 rounded-full transition-colors duration-200 focus:outline-none flex items-center px-1 cursor-pointer dark:!bg-gray-400;
+  }
+
+  .toggle-switch-span {
+    @apply w-6 h-6 rounded-full bg-white shadow;
+  }
+
+  .tab-list-panel {
+    @apply flex gap-2 justify-center mb-6 text-gray-800;
+  }
+  .tab-list-panel button {
+    @apply px-4 py-2 rounded-2xl font-semibold transition-all cursor-pointer;
+  }
+
+  .info-section {
+    @apply font-bold mb-1;
+  }
+  .info-section-inner-panel {
+    @apply rounded-xl bg-transparent px-4 py-2 gap-6 items-center justify-center md:justify-start w-auto inline-flex;
+  }
+
+  .info-section-inner-panel span {
+    @apply capitalize flex items-center gap-1;
+  }
+
+  .gender-ratio-panel {
+    @apply flex items-center gap-1;
   }
 }
 

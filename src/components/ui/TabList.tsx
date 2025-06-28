@@ -17,13 +17,11 @@ export default function TabList({
   className = "",
 }: TabListProps) {
   return (
-    <div
-      className={`flex gap-2 justify-center mb-6 text-gray-800 ${className}`}
-    >
+    <div className={`tab-list-panel ${className}`}>
       {tabs.map((tab) => (
         <button
           key={tab.id}
-          className={`px-4 py-2 rounded-2xl font-semibold transition-all cursor-pointer capitalize ${
+          className={`${
             selectedTab === tab.id
               ? "bg-black/30 text-blue-900"
               : "bg-white/30 text-white/70 hover:bg-white/20"
