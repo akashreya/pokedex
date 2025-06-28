@@ -41,14 +41,14 @@ export default function PokemonHeader({
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between mb-8 text-gray-800">
-      <div className="text-center md:text-left mb-4 md:mb-0 flex-1">
-        <div className="text-xl font-mono mb-1">
+    <div className="pokeheader-main-panel">
+      <div className="pokeheader-details">
+        <div className="pokenumber">
           #{pokemon.id.toString().padStart(3, "0")}
         </div>
-        <h1 className="text-4xl font-bold mb-2 capitalize">{pokemon.name}</h1>
-        <div className="text-lg font-semibold mb-2">{genera}</div>
-        <div className="flex gap-2 mt-2 mb-2 justify-center md:justify-start">
+        <h1 className="poke-name">{pokemon.name}</h1>
+        <div className="poke-genera">{genera}</div>
+        <div className="poke-types">
           {pokemon.types.map((type: any) => (
             <TypeLogoBadge key={type.type.name} type={type.type.name} />
           ))}
@@ -59,7 +59,7 @@ export default function PokemonHeader({
         {maleRate !== null && femaleRate !== null && (
           <div className="mb-2">
             <div className="font-bold mb-1">Gender Ratio</div>
-            <div className="rounded-xl bg-transparent px-4 py-2 gap-6 items-center justify-center md:justify-start w-auto inline-flex">
+            <div className="poke-gender-ratio">
               <GenderRatioItem
                 gender="male"
                 percentage={(maleRate / 8) * 100}
@@ -81,21 +81,21 @@ export default function PokemonHeader({
         {cryUrl && (
           <button
             onClick={playCry}
-            className="mt-2 px-4 py-1 rounded bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-all shadow"
+            className="poke-cry"
             title="Play Pokémon Cry"
           >
             🔊 Cry
           </button>
         )}
       </div>
-      <div className="relative w-100 h-100">
+      <div className="pokeheader-image-panel">
         <motion.img
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.3 }}
           src={sprites[selectedSprite as keyof typeof sprites]}
           alt={pokemon.name}
-          className="w-full h-full object-contain drop-shadow-2xl"
+          className="pokeheader-image"
         />
       </div>
     </div>

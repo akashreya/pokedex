@@ -16,18 +16,14 @@ export default function PokemonStats({ stats }: PokemonStatsProps) {
   );
 
   return (
-    <div className="bg-white/20 rounded-2xl p-6 mt-8 mb-8 shadow-inner overflow-visible">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800 tracking-wide">
-        Base Stats
-      </h2>
-      <div className="space-y-3">
+    <div className="pokestat-panel">
+      <h2>Base Stats</h2>
+      <div className="inner-panel">
         {stats.map((stat: any) => (
           <StatBar key={stat.stat.name} stat={stat} />
         ))}
       </div>
-      <div className="mt-6 text-lg font-semibold text-gray-800 flex justify-end">
-        Total: {totalStats}
-      </div>
+      <div className="pokestat-total">Total: {totalStats}</div>
     </div>
   );
 }

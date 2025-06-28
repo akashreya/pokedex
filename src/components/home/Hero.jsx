@@ -13,7 +13,11 @@ export default function Hero() {
             transition={{ duration: 0.9 }}
             className="hero-image"
           >
-            <img src="Pokémon_logo.svg" className="mx-auto" />
+            <img
+              src="Pokémon_logo.svg"
+              alt="pokemon_logo"
+              className="mx-auto"
+            />
           </motion.div>
           <h1 className="hero-heading font-poppins">
             Discover the World of Pokémon

@@ -13,6 +13,15 @@ interface PokemonAboutProps {
   };
 }
 
+function AboutStatBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="poke-stat-block">
+      <div className="text-sm">{label}</div>
+      <div className="text-lg font-semibold">{value}</div>
+    </div>
+  );
+}
+
 export default function PokemonAbout({ pokemon }: PokemonAboutProps) {
   const { species } = usePokemonSpecies(pokemon?.species?.url || null);
 
@@ -25,32 +34,18 @@ export default function PokemonAbout({ pokemon }: PokemonAboutProps) {
   return (
     <div>
       {/* About content: physical characteristics, etc. */}
-      <div className="mb-6 text-center max-w-xl mx-auto text-gray-800">
-        {description}
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-8 text-gray-800">
-        <div className="bg-white/10 rounded-2xl p-4">
-          <div className="text-sm">Height</div>
-          <div className="text-lg font-semibold">
-            {(pokemon.height / 10).toFixed(1)}m
-          </div>
-        </div>
-        <div className="bg-white/10 rounded-2xl p-4">
-          <div className="text-sm">Weight</div>
-          <div className="text-lg font-semibold">
-            {(pokemon.weight / 10).toFixed(1)}kg
-          </div>
-        </div>
-        <div className="bg-white/10 rounded-2xl p-4">
-          <div className="text-sm">Region</div>
-          <div className="text-lg font-semibold">{getRegion(pokemon.id)}</div>
-        </div>
-        <div className="bg-white/10 rounded-2xl p-4">
-          <div className="text-sm">Species</div>
-          <div className="text-lg font-semibold capitalize">
-            {pokemon.species.name}
-          </div>
-        </div>
+      <div className="poke-desc">{description}</div>
+      <div className="poke-about-panel">
+        <AboutStatBlock
+          label="Height"
+          value={`${(pokemon.height / 10).toFixed(1)}m`}
+        />
+        <AboutStatBlock
+          label="Weight"
+          value={`${(pokemon.weight / 10).toFixed(1)}kg`}
+        />
+        <AboutStatBlock label="Region" value={getRegion(pokemon.id)} />
+        <AboutStatBlock label="Species" value={pokemon.species.name} />
       </div>
     </div>
   );

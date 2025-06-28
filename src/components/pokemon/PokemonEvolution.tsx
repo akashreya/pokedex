@@ -81,14 +81,12 @@ export default function PokemonEvolution({ pokemon }: PokemonEvolutionProps) {
 
   return (
     <motion.div
-      className="bg-white/20 rounded-2xl p-6 mb-8 shadow-inner overflow-visible"
+      className="evolution-panel"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <h2 className="text-2xl font-bold mb-4 text-gray-800 tracking-wide">
-        Evolution
-      </h2>
+      <h2 className="evo-heading">Evolution</h2>
 
       {loading && <EvolutionLoading />}
 

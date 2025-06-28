@@ -1,3 +1,5 @@
+import { TYPE_COLORS } from "@/constants/PokemonTypes";
+
 // Add type effectiveness data
 const typeEffectiveness: { [key: string]: { [key: string]: number } } = {
   normal: { rock: 0.5, ghost: 0, steel: 0.5 },
@@ -119,26 +121,7 @@ const typeEffectiveness: { [key: string]: { [key: string]: number } } = {
   fairy: { fighting: 2, poison: 0.5, dragon: 2, dark: 2, steel: 0.5 },
 };
 
-const allTypes = [
-  "normal",
-  "fire",
-  "water",
-  "electric",
-  "grass",
-  "ice",
-  "fighting",
-  "poison",
-  "ground",
-  "flying",
-  "psychic",
-  "bug",
-  "rock",
-  "ghost",
-  "dragon",
-  "dark",
-  "steel",
-  "fairy",
-];
+const allTypes = Object.keys(TYPE_COLORS);
 
 interface PokemonType {
   type: {

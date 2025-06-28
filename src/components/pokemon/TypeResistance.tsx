@@ -14,29 +14,20 @@ export default function TypeResistance({ pokemonTypes }: TypeResistanceProps) {
     calculateTypeEffectiveness(pokemonTypes);
 
   return (
-    <div className="bg-white/20 rounded-2xl p-6 mb-8">
-      <h2 className="text-2xl font-bold mb-4 tracking-wide text-gray-800">
-        Type Resistance
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="type-resistance-effectiveness">
+      <h2>Type Resistance</h2>
+      <div className="type-resistance-inner-panel">
         {/* Weaknesses */}
         <div>
-          <h3 className="text-lg font-semibold text-red-800 mb-3">
-            Weaknesses
-          </h3>
-          <div className="space-y-2">
+          <h3 className="weakness-heading">Weaknesses</h3>
+          <div className="inner-panel">
             {weaknesses.map(({ type, effectiveness }) => (
-              <div
-                key={type}
-                className="flex items-center justify-between bg-red-900/30 rounded-lg p-2"
-              >
-                <div className="flex items-center gap-2">
+              <div key={type} className="weakness-type-panel">
+                <div className="badge-panel">
                   <TypeLogoBadge type={type} />
-                  <span className="capitalize text-red-800">{type}</span>
+                  <span className="weakness-type">{type}</span>
                 </div>
-                <span className="text-red-800 font-semibold">
-                  {effectiveness}x
-                </span>
+                <span className="weakness-x">{effectiveness}x</span>
               </div>
             ))}
           </div>
@@ -44,16 +35,11 @@ export default function TypeResistance({ pokemonTypes }: TypeResistanceProps) {
 
         {/* Resistances */}
         <div>
-          <h3 className="text-lg font-semibold text-green-800 mb-3">
-            Resistances
-          </h3>
-          <div className="space-y-2">
+          <h3 className="resistances-heading">Resistances</h3>
+          <div className="inner-panel">
             {resistances.map(({ type, effectiveness }) => (
-              <div
-                key={type}
-                className="flex items-center justify-between bg-green-900/30 rounded-lg p-2"
-              >
-                <div className="flex items-center gap-2">
+              <div key={type} className="resistance-type-panel">
+                <div className="badge-panel">
                   <TypeLogoBadge type={type} />
                   <span className="capitalize text-green-800">{type}</span>
                 </div>
@@ -67,16 +53,11 @@ export default function TypeResistance({ pokemonTypes }: TypeResistanceProps) {
 
         {/* Immunities */}
         <div className="md:col-span-2">
-          <h3 className="text-lg font-semibold text-gray-800 mb-3">
-            Immunities
-          </h3>
-          <div className="space-y-2">
+          <h3 className="immunities-heading">Immunities</h3>
+          <div className="inner-panel">
             {immunities.map(({ type }) => (
-              <div
-                key={type}
-                className="flex items-center justify-between bg-gray-800/50 rounded-lg p-2"
-              >
-                <div className="flex items-center gap-2">
+              <div key={type} className="immunities-type-panel">
+                <div className="badge-panel">
                   <TypeLogoBadge type={type} />
                   <span className="capitalize text-gray-800">{type}</span>
                 </div>
