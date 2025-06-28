@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { getPokemonByIdOrName } from "../services/pokedexapi";
 import LoadingSpinner from "../components/layout/LoadingSpinner.tsx";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { getGradientClass } from "../utils/pokemonUtils";
 import PokemonStats from "../components/pokemon/PokemonStats";
 import PokemonMoves from "../components/pokemon/PokemonMoves";
@@ -32,6 +32,8 @@ export default function PokemonDetailPage() {
   const touchEndX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const touchEndY = useRef<number | null>(null);
+  const navigationByButtonRef = useRef(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   // Tab configuration
   const TAB_ITEMS = ["about", "stats", "moves", "evolution"];
@@ -44,6 +46,10 @@ export default function PokemonDetailPage() {
     getPokemonByIdOrName(id)
       .then(async (res) => {
         setPokemon(res.data);
+        if (!navigationByButtonRef.current) {
+          setDirection(0);
+        }
+        navigationByButtonRef.current = false;
       })
       .catch(() => setError("Pokémon not found."))
       .finally(() => setLoading(false));
@@ -127,8 +133,21 @@ export default function PokemonDetailPage() {
     setSelectedSprite("default");
   }, [pokemon?.id]);
 
+  // Delayed spinner effect
+  useEffect(() => {
+    let spinnerTimeout: ReturnType<typeof setTimeout> | null = null;
+    if (loading) {
+      spinnerTimeout = setTimeout(() => setShowSpinner(true), 300); // 300ms delay
+    } else {
+      setShowSpinner(false);
+    }
+    return () => {
+      if (spinnerTimeout) clearTimeout(spinnerTimeout);
+    };
+  }, [loading]);
+
   // After all hooks, handle early returns:
-  if (loading)
+  if (loading && showSpinner)
     return (
       <div className="loading">
         <LoadingSpinner />
@@ -182,26 +201,31 @@ export default function PokemonDetailPage() {
   // Direction-aware variants
   const pageVariants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
+      x: direction === 0 ? 0 : direction > 0 ? "100%" : "-100%",
       opacity: 0,
+      scale: 0.5,
     }),
     center: {
       x: 0,
       opacity: 1,
+      scale: 1,
     },
     exit: (direction: number) => ({
-      x: direction > 0 ? "-100%" : "100%",
+      x: direction === 0 ? 0 : direction > 0 ? "-100%" : "100%",
       opacity: 0,
+      scale: 0.5,
     }),
   };
 
   const goToPrevious = () => {
+    navigationByButtonRef.current = true;
     setDirection(-1);
     if (pokemon.id > 1) {
       navigate(`/pokemon/${pokemon.id - 1}`);
     }
   };
   const goToNext = () => {
+    navigationByButtonRef.current = true;
     setDirection(1);
     if (pokemon.id < 1010) {
       navigate(`/pokemon/${pokemon.id + 1}`);
@@ -263,7 +287,7 @@ export default function PokemonDetailPage() {
           <img
             src="/left-arrow.svg"
             alt="Previous"
-            className="pokemon-detail-left-arrow-img"
+            className="pokemon-detail-arrow-img"
           />
         </button>
         <button
@@ -284,88 +308,95 @@ export default function PokemonDetailPage() {
             className="pokemon-detail-arrow-img"
           />
         </button>
-        <motion.div
-          key={pokemon.id}
-          custom={direction}
-          variants={pageVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{ type: "tween", duration: 0.7, ease: "easeInOut" }}
-          className={`pokemon-detail-background ${getGradientClass(
-            type1,
-            type2
-          )}`}
-        >
-          <PokemonHeader
-            pokemon={pokemon}
-            selectedSprite={selectedSprite}
-            sprites={spritesWithDefaults}
-          />
-
-          {/* Sprite Gallery */}
-          {Object.keys(spritesWithDefaults).length > 1 && (
-            <Carousel
-              items={Object.entries(spritesWithDefaults)}
-              renderItem={([key, url]) => (
-                <button
-                  key={key}
-                  onClick={() => setSelectedSprite(key)}
-                  className={`p-2 rounded-2xl transition-all ${
-                    selectedSprite === key
-                      ? "bg-white/20 scale-110"
-                      : "bg-white/10 hover:bg-white/15"
-                  }`}
-                  title={key === "default" ? "Default" : key}
-                >
-                  <img
-                    src={url}
-                    alt={key === "default" ? "Default" : key}
-                    className="w-15 h-15 object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                </button>
-              )}
-              className="pokemon-detail-sprite-gallery mb-6"
-              showNavButtons={true}
-              showDotIndicators={true}
-              autoPlay={false}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={pokemon.id}
+            custom={direction}
+            variants={pageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              type: "spring",
+              duration: 0.2,
+              visualDuration: 0.9,
+              ease: "easeInOut",
+            }}
+            className={`pokemon-detail-background ${getGradientClass(
+              type1,
+              type2
+            )}`}
+          >
+            <PokemonHeader
+              pokemon={pokemon}
+              selectedSprite={selectedSprite}
+              sprites={spritesWithDefaults}
             />
-          )}
 
-          {/* Tabbed Interface */}
-          <div className="mb-3">
-            <TabList
-              tabs={TAB_ITEMS.map((id) => ({ id }))}
-              selectedTab={selectedTab}
-              onTabChange={setSelectedTab}
-            />
-            <div className="pokemon-detail-tab-content">
-              {(() => {
-                const tabContent = {
-                  about: (
-                    <div>
-                      <PokemonAbout pokemon={pokemon} />
-                      <TypeEffectiveness pokemonTypes={pokemon.types} />
-                      <TypeResistance pokemonTypes={pokemon.types} />
-                    </div>
-                  ),
-                  stats: <PokemonStats stats={pokemon.stats} />,
-                  moves: <PokemonMoves moves={pokemon.moves} />,
-                  evolution: (
-                    <PokemonEvolution
-                      pokemon={pokemon}
-                      sprites={spritesWithDefaults}
+            {/* Sprite Gallery */}
+            {Object.keys(spritesWithDefaults).length > 1 && (
+              <Carousel
+                items={Object.entries(spritesWithDefaults)}
+                renderItem={([key, url]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSelectedSprite(key)}
+                    className={`p-2 rounded-2xl transition-all ${
+                      selectedSprite === key
+                        ? "bg-white/20 scale-110"
+                        : "bg-white/10 hover:bg-white/15"
+                    }`}
+                    title={key === "default" ? "Default" : key}
+                  >
+                    <img
+                      src={url}
+                      alt={key === "default" ? "Default" : key}
+                      className="w-15 h-15 object-contain"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
                     />
-                  ),
-                };
-                return tabContent[selectedTab as keyof typeof tabContent];
-              })()}
+                  </button>
+                )}
+                className="pokemon-detail-sprite-gallery mb-6"
+                showNavButtons={true}
+                showDotIndicators={true}
+                autoPlay={false}
+              />
+            )}
+
+            {/* Tabbed Interface */}
+            <div className="mb-3">
+              <TabList
+                tabs={TAB_ITEMS.map((id) => ({ id }))}
+                selectedTab={selectedTab}
+                onTabChange={setSelectedTab}
+              />
+              <div className="pokemon-detail-tab-content">
+                {(() => {
+                  const tabContent = {
+                    about: (
+                      <div>
+                        <PokemonAbout pokemon={pokemon} />
+                        <TypeEffectiveness pokemonTypes={pokemon.types} />
+                        <TypeResistance pokemonTypes={pokemon.types} />
+                      </div>
+                    ),
+                    stats: <PokemonStats stats={pokemon.stats} />,
+                    moves: <PokemonMoves moves={pokemon.moves} />,
+                    evolution: (
+                      <PokemonEvolution
+                        pokemon={pokemon}
+                        sprites={spritesWithDefaults}
+                      />
+                    ),
+                  };
+                  return tabContent[selectedTab as keyof typeof tabContent];
+                })()}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

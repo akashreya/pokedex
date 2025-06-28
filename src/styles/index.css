@@ -383,7 +383,7 @@
     @apply w-40 h-40 transition-all duration-200 hover:scale-150;
   }
   .pokemon-detail-right-arrow-button {
-    @apply hidden md:flex items-center justify-center absolute right-50 top-1/2 -translate-y-1/2 z-20 w-70 h-70 rounded-full font-bold transition-all duration-200;
+    @apply hidden md:flex items-center justify-center absolute bg-transparent font-bold transition-all duration-200 right-50 top-1/2 -translate-y-1/2 z-20 w-70 h-70 rounded-full;
   }
   .pokemon-detail-background {
     @apply rounded-4xl shadow-lg p-8 bg-gradient-to-r;
