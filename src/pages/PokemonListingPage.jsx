@@ -42,7 +42,7 @@ export default function PokemonListing() {
         filterRarity: localStorage.getItem("pokemonRarity") || "all",
         searchTerm: localStorage.getItem("pokemonSearch") || "",
         heightRange: JSON.parse(localStorage.getItem("pokemonHeightRange")) || [
-          0, 3000,
+          0, 300,
         ],
         weightRange: JSON.parse(localStorage.getItem("pokemonWeightRange")) || [
           0, 10000,
@@ -57,7 +57,7 @@ export default function PokemonListing() {
         selectedTypes: [],
         filterRarity: "all",
         searchTerm: "",
-        heightRange: [0, 3000],
+        heightRange: [0, 300],
         weightRange: [0, 10000],
         viewMode: "grid",
       };
@@ -226,7 +226,7 @@ export default function PokemonListing() {
     setSelectedTypes([]);
     setFilterRarity("all");
     setSearchTerm("");
-    setHeightRange([0, 3000]);
+    setHeightRange([0, 300]);
     setWeightRange([0, 10000]);
   }
 

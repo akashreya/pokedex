@@ -9,9 +9,7 @@ export default function PokemonCardList({ pokemon, index = 0 }) {
   return (
     <Link to={`/pokemon/${pokemon.id}`} className="block focus:outline-none">
       <motion.div
-        className={`w-full flex items-center gap-4 border border-blue-200 rounded-3xl
-           shadow-sm px-4 py-2 hover:shadow-lg transition-all object-contain
-           duration-200 bg-gradient-to-r  ${getGradientClass(type1, type2)}`}
+        className={`pokemon-card-list  ${getGradientClass(type1, type2)}`}
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
@@ -21,7 +19,7 @@ export default function PokemonCardList({ pokemon, index = 0 }) {
         }}
         whileHover={{ y: -3, transition: { duration: 0.2 } }}
       >
-        <div className="flex items-center gap-3 flex-grow">
+        <div className="pokemon-card-list-inner-panel">
           <span className="pokemon-card-number">
             #{pokemon.id.toString().padStart(3, "0")}
           </span>

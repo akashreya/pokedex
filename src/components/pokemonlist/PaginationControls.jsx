@@ -38,11 +38,10 @@ export default function PaginationControls({
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 mt-4 mx-auto flex-shrink">
+    <div className="pagination">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded border border-transparent bg-rose-200 dark:bg-gray-500 disabled:cursor-not-allowed cursor-pointer"
         aria-label="Previous page"
       >
         <ChevronLeft className="w-4 h-4" />
@@ -54,23 +53,19 @@ export default function PaginationControls({
         onChange={handleInputChange}
         onKeyDown={handleInputKeyDown}
         onBlur={handleInputBlur}
-        className={`w-12 text-center px-2 py-1 rounded-xl border font-semibold text-base outline-none bg-rose-200  dark:bg-gray-500 transition-colors
-          ${
-            inputError
-              ? "border-red-500 bg-red-50"
-              : "border-hidden  text-primary"
-          }`}
+        className={`${
+          inputError
+            ? "border-red-500 bg-red-50"
+            : "border-hidden  text-primary"
+        }`}
         aria-label="Page number"
       />
-      <span className="text-xl text-gray-400 font-light">/</span>
-      <span className="text-base text-gray-700  dark:text-white font-semibold">
-        {totalPages}
-      </span>
+      <span className="pagination-slash">/</span>
+      <span className="pagination-total">{totalPages}</span>
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded border border-transparent bg-rose-200  dark:bg-gray-500 disabled:cursor-not-allowed cursor-pointer"
         aria-label="Next page"
       >
         <ChevronRight className="w-4 h-4" />

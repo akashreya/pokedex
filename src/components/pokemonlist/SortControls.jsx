@@ -20,7 +20,7 @@ export default function SortControls({ sortBy, onSortChange }) {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="sort-control">
       <label htmlFor="sort-select" className="font-semibold">
         Sort by:
       </label>
@@ -28,7 +28,6 @@ export default function SortControls({ sortBy, onSortChange }) {
         id="sort-select"
         value={sortBy}
         onChange={(e) => onSortChange(e.target.value)}
-        className="border rounded px-2 py-1 bg-white dark:bg-gray-500 dark:text-white dark:border-gray-600"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

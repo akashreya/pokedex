@@ -266,7 +266,7 @@
   .loading-error {
     @apply text-red-500 text-3xl font-bold py-8 text-center;
   }
-  .pokemon-list {
+  .pokemon-gridlayout {
     @apply w-full sm:w-1/2 md:w-3/4 min-h-[400px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
     gap-4 space-y-2 mx-auto;
   }
@@ -352,7 +352,7 @@
     @apply w-full border rounded-2xl px-2 py-1 border-black dark:border-rose-50 bg-white dark:bg-gray-500 dark:text-white;
   }
   .clear-filter {
-    @apply mt-4 px-3 py-2 rounded-2xl bg-gray-200 dark:bg-gray-500 hover:bg-gray-300;
+    @apply mt-4 px-3 py-2 rounded-2xl bg-gray-200 dark:bg-gray-500 hover:bg-gray-300 cursor-pointer;
   }
 
   .app {
@@ -433,6 +433,42 @@
 
   .gender-ratio-panel {
     @apply flex items-center gap-1;
+  }
+
+  .sort-control {
+    @apply flex items-center gap-2;
+  }
+  .sort-control select {
+    @apply border rounded-xl px-2 py-1 bg-white dark:bg-gray-500 dark:text-white dark:border-gray-600;
+  }
+
+  .pokemon-listlayout {
+    @apply w-full sm:w-1/2 md:w-3/4 min-h-[500px] grid grid-cols-1 sm:grid-cols-3  md:grid-cols-5  gap-4 mx-auto;
+  }
+
+  .pokemon-card-list {
+    @apply w-full flex items-center gap-4 border border-blue-200 rounded-3xl shadow-sm px-4 py-2 hover:shadow-lg transition-all object-contain duration-200 bg-gradient-to-r;
+  }
+
+  .pokemon-card-list-inner-panel {
+    @apply flex items-center gap-3 flex-grow;
+  }
+
+  .pagination {
+    @apply flex items-center justify-center gap-4 mt-4 mx-auto flex-shrink;
+  }
+  .pagination button {
+    @apply p-2 rounded border border-transparent bg-rose-200 dark:bg-gray-500 disabled:cursor-not-allowed cursor-pointer;
+  }
+
+  .pagination input {
+    @apply w-12 text-center px-2 py-1 rounded-xl border font-semibold text-base outline-none bg-rose-200  dark:bg-gray-500 transition-colors duration-200;
+  }
+  .pagination-slash {
+    @apply text-xl text-gray-700 dark:text-gray-200 font-light;
+  }
+  .pagination-total {
+    @apply text-base text-gray-700 dark:text-gray-200 font-semibold;
   }
 }
 

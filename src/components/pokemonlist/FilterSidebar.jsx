@@ -1,27 +1,9 @@
 import { usePokemonContext } from "@/context/PokemonContext";
 import { Slider } from "antd";
 import "antd/dist/reset.css";
+import { TYPE_COLORS } from "@/constants/PokemonTypes";
 
-const ALL_TYPES = [
-  "normal",
-  "fire",
-  "water",
-  "electric",
-  "grass",
-  "ice",
-  "fighting",
-  "poison",
-  "ground",
-  "flying",
-  "psychic",
-  "bug",
-  "rock",
-  "ghost",
-  "dragon",
-  "dark",
-  "steel",
-  "fairy",
-];
+const ALL_TYPES = Object.keys(TYPE_COLORS);
 
 export default function FilterSidebar({
   selectedTypes,
@@ -102,7 +84,9 @@ export default function FilterSidebar({
         <Slider
           range
           min={0}
-          max={3000}
+          step={50}
+          dots={true}
+          max={300}
           value={heightRange}
           onChange={setHeightRange}
           trackStyle={[{ backgroundColor: "#047481" }]}
@@ -121,6 +105,8 @@ export default function FilterSidebar({
         <Slider
           range
           min={0}
+          step={2000}
+          dots={true}
           max={10000}
           value={weightRange}
           onChange={setWeightRange}

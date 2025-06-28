@@ -3,7 +3,7 @@ import NoResults from "./NoResults";
 
 export default function PokemonGridLayout({ paginatedPokemon }) {
   return (
-    <div className="pokemon-list ">
+    <div className="pokemon-gridlayout">
       {paginatedPokemon.length === 0 ? (
         <NoResults />
       ) : (
