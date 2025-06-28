@@ -16,6 +16,7 @@ import PokemonHeader from "../components/pokemon/PokemonHeader";
 import { usePokemonSpecies } from "../hooks/usePokemonSpecies";
 import { useMultiplePokemon } from "../hooks/useMultiplePokemon";
 import SearchBar from "../components/home/SearchBar.jsx";
+import Carousel from "../components/ui/Carousel";
 
 export default function PokemonDetailPage() {
   const { id } = useParams();
@@ -215,9 +216,9 @@ export default function PokemonDetailPage() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div className="container mx-auto py-8 px-4">
-        <div className="flex justify-between items-center">
-          <div className="flex-shrink-0">
+      <div className="pokemon-detail-container">
+        <div className="pokemon-detail-header-row">
+          <div className="pokemon-detail-breadcrumb">
             <Breadcrumb
               items={[
                 { label: "Home", to: "/" },
@@ -242,7 +243,7 @@ export default function PokemonDetailPage() {
               ]}
             />
           </div>
-          <div className="w-60 mt-4">
+          <div className="pokemon-detail-searchbar">
             <SearchBar />
           </div>
         </div>
@@ -252,9 +253,7 @@ export default function PokemonDetailPage() {
           onClick={goToPrevious}
           disabled={pokemon.id <= 1}
           aria-label="Previous Pokémon"
-          className={`hidden md:flex items-center justify-center absolute 
-          left-50 top-1/2 -translate-y-1/2 z-20 w-70 h-70 rounded-full
-           bg-transparent font-bold transition-all duration-200
+          className={`pokemon-detail-left-arrow-button
             ${
               pokemon.id <= 1
                 ? "opacity-40 cursor-not-allowed"
@@ -265,15 +264,14 @@ export default function PokemonDetailPage() {
           <img
             src="/left-arrow.svg"
             alt="Previous"
-            className="w-40 h-40 transition-all duration-200 hover:scale-150"
+            className="pokemon-detail-left-arrow-img"
           />
         </button>
         <button
           onClick={goToNext}
           disabled={pokemon.id >= 1025}
           aria-label="Next Pokémon"
-          className={`hidden md:flex items-center justify-center absolute right-50 top-1/2 -translate-y-1/2 
-          z-20 w-70 h-70 rounded-full font-bold transition-all duration-200
+          className={`pokemon-detail-right-arrow-button
           ${
             pokemon.id >= 1025
               ? "opacity-40 cursor-not-allowed"
@@ -284,7 +282,7 @@ export default function PokemonDetailPage() {
           <img
             src="/right-arrow.svg"
             alt="Next"
-            className="w-40 h-40 transition-all duration-200 hover:scale-150"
+            className="pokemon-detail-arrow-img"
           />
         </button>
         <motion.div
@@ -295,7 +293,7 @@ export default function PokemonDetailPage() {
           animate="center"
           exit="exit"
           transition={{ type: "tween", duration: 0.7, ease: "easeInOut" }}
-          className={`rounded-4xl shadow-lg p-8 bg-gradient-to-r ${getGradientClass(
+          className={`pokemon-detail-background ${getGradientClass(
             type1,
             type2
           )}`}
@@ -308,52 +306,44 @@ export default function PokemonDetailPage() {
 
           {/* Sprite Gallery */}
           {Object.keys(spritesWithDefaults).length > 1 && (
-            <div className="flex justify-center gap-4 mb-8">
-              {Object.entries(spritesWithDefaults)
-                .filter(
-                  ([_, url]) =>
-                    url &&
-                    url.trim() !== "" &&
-                    url !== "null" &&
-                    url !== "undefined"
-                )
-                .map(([key, url]) => (
-                  <button
-                    key={key}
-                    onClick={() => setSelectedSprite(key)}
-                    className={`p-2 rounded-2xl transition-all ${
-                      selectedSprite === key
-                        ? "bg-white/20 scale-110"
-                        : "bg-white/10 hover:bg-white/15"
-                    }`}
-                    title={`${pokemon.name} ${
-                      key === "default" ? "Default" : key
-                    }`}
-                  >
-                    <img
-                      src={url}
-                      alt={`${pokemon.name} ${
-                        key === "default" ? "Default" : key
-                      }`}
-                      className="w-12 h-12 object-contain"
-                      onError={(e) => {
-                        console.warn(`Failed to load sprite for ${key}:`, url);
-                        e.currentTarget.style.display = "none";
-                      }}
-                    />
-                  </button>
-                ))}
-            </div>
+            <Carousel
+              items={Object.entries(spritesWithDefaults)}
+              renderItem={([key, url]) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedSprite(key)}
+                  className={`p-2 rounded-2xl transition-all ${
+                    selectedSprite === key
+                      ? "bg-white/20 scale-110"
+                      : "bg-white/10 hover:bg-white/15"
+                  }`}
+                  title={key === "default" ? "Default" : key}
+                >
+                  <img
+                    src={url}
+                    alt={key === "default" ? "Default" : key}
+                    className="w-15 h-15 object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                </button>
+              )}
+              className="pokemon-detail-sprite-gallery mb-6"
+              showNavButtons={true}
+              showDotIndicators={true}
+              autoPlay={false}
+            />
           )}
 
           {/* Tabbed Interface */}
-          <div className="mb-8">
+          <div className="mb-3">
             <TabList
               tabs={TAB_ITEMS.map((id) => ({ id }))}
               selectedTab={selectedTab}
               onTabChange={setSelectedTab}
             />
-            <div className="bg-white/10 rounded-2xl p-6">
+            <div className="pokemon-detail-tab-content">
               {(() => {
                 const tabContent = {
                   about: (

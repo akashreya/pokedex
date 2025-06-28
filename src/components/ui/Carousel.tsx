@@ -87,7 +87,7 @@ export default function Carousel<T>({
           <button
             onClick={handlePrev}
             className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 text-white rounded-full 
-                     opacity-0 group-hover:opacity-100 hover:opacity-100 transition-opacity duration-200 hover:bg-black/30"
+                     transition-opacity duration-200 hover:bg-black/30"
             aria-label="Previous Item"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -95,7 +95,7 @@ export default function Carousel<T>({
           <button
             onClick={handleNext}
             className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 text-white rounded-full 
-                     opacity-0 group-hover:opacity-100 hover:opacity-100 transition-opacity duration-200 hover:bg-black/30"
+                     transition-opacity duration-200 hover:bg-black/30"
             aria-label="Next Item"
           >
             <ChevronRight className="w-6 h-6" />

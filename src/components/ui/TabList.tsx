@@ -25,8 +25,8 @@ export default function TabList({
           key={tab.id}
           className={`px-4 py-2 rounded-2xl font-semibold transition-all cursor-pointer capitalize ${
             selectedTab === tab.id
-              ? "bg-white/30 text-blue-900"
-              : "bg-white/10 text-white/70 hover:bg-white/20"
+              ? "bg-black/30 text-blue-900"
+              : "bg-white/30 text-white/70 hover:bg-white/20"
           }`}
           onClick={() => onTabChange(tab.id)}
         >

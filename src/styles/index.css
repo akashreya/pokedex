@@ -368,6 +368,38 @@
     @apply flex-1 bg-gradient-to-tr from-[#ec77ab] to-[#7873f5]
     dark:bg-gradient-to-br dark:from-[#152331] dark:to-[#000000];
   }
+
+  .pokemon-detail-container {
+    @apply container mx-auto py-8 px-4;
+  }
+  .pokemon-detail-header-row {
+    @apply flex justify-between items-center;
+  }
+  .pokemon-detail-searchbar {
+    @apply w-60 mt-4;
+  }
+  .pokemon-detail-breadcrumb {
+    @apply flex-shrink-0;
+  }
+
+  .pokemon-detail-left-arrow-button {
+    @apply hidden md:flex items-center justify-center absolute bg-transparent font-bold transition-all duration-200 left-50 top-1/2 -translate-y-1/2 z-20 w-70 h-70 rounded-full;
+  }
+  .pokemon-detail-arrow-img {
+    @apply w-40 h-40 transition-all duration-200 hover:scale-150;
+  }
+  .pokemon-detail-right-arrow-button {
+    @apply hidden md:flex items-center justify-center absolute right-50 top-1/2 -translate-y-1/2 z-20 w-70 h-70 rounded-full font-bold transition-all duration-200;
+  }
+  .pokemon-detail-background {
+    @apply rounded-4xl shadow-lg p-8 bg-gradient-to-r;
+  }
+  .pokemon-detail-sprite-gallery {
+    @apply flex justify-center w-[250px] mx-auto;
+  }
+  .pokemon-detail-tab-content {
+    @apply bg-white/10 rounded-2xl p-6;
+  }
 }
 
 @theme inline {
