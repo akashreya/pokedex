@@ -35,7 +35,7 @@ export default function EvolutionPokemon({
   delay,
   isTarget = false,
 }: EvolutionPokemonProps) {
-  const gradientClass = pokemonData ? getPokemonGradientClass(pokemonData) : "";
+  const gradientClass = getPokemonGradientClass(pokemonData);
 
   return (
     <div

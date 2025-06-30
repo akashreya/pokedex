@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useEvolutionPath } from "../../hooks/useEvolutionPath";
 import {
-  EvolutionLoading,
   EvolutionError,
   EvolutionSingleStage,
   EvolutionTree,
@@ -87,8 +86,6 @@ export default function PokemonEvolution({ pokemon }: PokemonEvolutionProps) {
       animate="visible"
     >
       <h2 className="evo-heading">Evolution</h2>
-
-      {loading && <EvolutionLoading />}
 
       {!loading && (hasError || error) && (
         <EvolutionError errorMessage={errorMessage} />
