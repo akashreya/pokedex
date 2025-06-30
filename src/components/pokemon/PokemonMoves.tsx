@@ -91,7 +91,9 @@ export default function PokemonMoves({ moves: rawMoves }: PokemonMovesProps) {
             <tr>
               <th className="movelist-tableheader">Move</th>
               <th className="movelist-tableheader">Power</th>
-              <th className="movelist-tableheader">Accuracy</th>
+              <th className="movelist-tableheader hidden md:visible">
+                Accuracy
+              </th>
               <th className="movelist-tableheader">Level</th>
               <th className="movelist-tableheader">Method</th>
             </tr>
@@ -112,7 +114,9 @@ export default function PokemonMoves({ moves: rawMoves }: PokemonMovesProps) {
                 </td>
 
                 <td className="movelist-tableheader ">{move.power}</td>
-                <td className="movelist-tableheader ">{move.accuracy}</td>
+                <td className="movelist-tableheader hidden md:visible">
+                  {move.accuracy}
+                </td>
                 <td className="movelist-tableheader ">
                   {move.level !== null ? move.level : "-"}
                 </td>

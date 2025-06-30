@@ -630,13 +630,13 @@
   }
 
   .evolution-sprite-outer-panel {
-    @apply flex flex-col items-center min-h-[200px];
+    @apply flex flex-col items-center min-h-[200px] mx-2 md:mx-8;
   }
   .evo-single-sprite-panel {
     @apply flex-shrink-0;
   }
   .evo-image-panel {
-    @apply w-50 h-50 rounded-full shadow-lg shadow-black bg-gradient-to-r;
+    @apply w-40 md:w-50 h-40 md:h-50 rounded-full shadow-lg shadow-black bg-gradient-to-r;
   }
   .evo-image {
     @apply w-full h-full object-contain drop-shadow-md;
@@ -648,7 +648,7 @@
     @apply animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500;
   }
   .evo-details {
-    @apply flex flex-col items-center mt-4;
+    @apply flex flex-col items-center justify-start min-w-[120px] mt-4;
   }
   .evo-name {
     @apply capitalize font-semibold text-xl text-gray-600;

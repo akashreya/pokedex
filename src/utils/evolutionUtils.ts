@@ -29,7 +29,7 @@ export interface EvolutionDetail {
  */
 export function createEvolutionDescription(detail: EvolutionDetail): string {
   const parts: string[] = [];
-  
+
   // Base trigger
   switch (detail.trigger.name) {
     case "use-item":
@@ -54,75 +54,75 @@ export function createEvolutionDescription(detail: EvolutionDetail): string {
 
   // Add specific conditions
   if (detail.item) {
-    parts.push(`a ${detail.item.name.replace('-', ' ')}`);
+    parts.push(`a ${detail.item.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())}`);
   }
-  
+
   if (detail.min_level) {
     parts.push(`at ${detail.min_level} `);
   }
-  
+
   if (detail.held_item) {
-    parts.push(`while holding a ${detail.held_item.name.replace('-', ' ')}`);
+    parts.push(`while holding a ${detail.held_item.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())}`);
   }
-  
+
   if (detail.known_move) {
-    parts.push(`knowing ${detail.known_move.name.replace('-', ' ')}`);
+    parts.push(`knowing ${detail.known_move.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())}`);
   }
 
   if (detail.known_move_type) {
-    parts.push(`knowing ${detail.known_move_type.name.replace('-', ' ')} move`);
+    parts.push(`knowing ${detail.known_move_type.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())} move`);
   }
-  
+
   if (detail.min_happiness) {
     parts.push(`with minimum happiness (${detail.min_happiness}+)`);
   }
-  
+
   if (detail.min_affection) {
     parts.push(`with minimum affection (${detail.min_affection}+)`);
   }
-  
+
   if (detail.min_beauty) {
     parts.push(`with minimum beauty (${detail.min_beauty}+)`);
   }
-  
+
   if (detail.time_of_day) {
     parts.push(`during the ${detail.time_of_day}`);
   }
-  
+
   if (detail.location) {
-    parts.push(`at ${detail.location.name.replace('-', ' ')}`);
+    parts.push(`at ${detail.location.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())}`);
   }
-  
+
   if (detail.gender) {
     const genderText = detail.gender === 1 ? "female" : "male";
     parts.push(`(${genderText} only)`);
   }
-  
+
   if (detail.needs_overworld_rain) {
     parts.push("while it's raining");
   }
-  
+
   if (detail.turn_upside_down) {
     parts.push("with the device turned upside down");
   }
-  
+
   if (detail.party_species) {
-    parts.push(`with ${detail.party_species.name.replace('-', ' ')} in party`);
+    parts.push(`with ${detail.party_species.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())} in party`);
   }
-  
+
   if (detail.party_type) {
-    parts.push(`with ${detail.party_type.name} type in party`);
+    parts.push(`with ${detail.party_type.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())} type in party`);
   }
-  
+
   if (detail.trade_species) {
-    parts.push(`for a ${detail.trade_species.name.replace('-', ' ')}`);
+    parts.push(`for a ${detail.trade_species.name.replace('-', ' ').replace(/^./, c => c.toUpperCase())}`);
   }
-  
+
   if (detail.relative_physical_stats !== null) {
-    const statText = detail.relative_physical_stats === 1 
-      ? "Attack > Defense" 
-      : detail.relative_physical_stats === -1 
-        ? "Defense > Attack" 
+    const statText = detail.relative_physical_stats === 1
+      ? "Attack > Defense"
+      : detail.relative_physical_stats === -1
+        ? "Defense > Attack"
         : "Attack = Defense";
     parts.push(`(${statText})`);
   }
@@ -204,6 +204,6 @@ export function getSpriteUrl(
       ""
     );
   }
-  
+
   return ""
 } 

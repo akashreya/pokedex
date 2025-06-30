@@ -1,22 +1,13 @@
-import { Fragment } from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { useMultiplePokemon } from "../../../hooks/useMultiplePokemon";
-import { getPokemonGradientClass } from "@/utils/pokemonUtils";
-import { EvolutionDescription, EvolutionArrow } from "./index";
+import { EvolutionDescription, EvolutionPokemon } from "./index";
 // @ts-ignore
 import TypeLogoBadge from "../../ui/TypeLogoBadge";
 
-interface PokemonType {
-  type: {
-    name: string;
-  };
-}
 interface EvolutionMidBranchProps {
   evolutionPath: {
     previous: string[];
     next: string[];
-    evolutionMethods?: any; // Full chain node
+    evolutionMethods?: any;
   };
   pokemonName: string;
   getSpriteUrl: (pokemonData: any) => string;
@@ -82,160 +73,65 @@ export default function EvolutionMidBranch({
       {/* Previous evolution path */}
       {evolutionPath.previous.length > 0 && (
         <div className="flex items-center gap-4">
-          {evolutionPath.previous.map((name, idx) => {
-            const pokemonData = pokemonCache[name];
-            const isLoading = !pokemonData;
-            const gradientClass = getPokemonGradientClass(pokemonData);
-
-            return (
-              <Fragment key={name}>
-                {idx > 0 && <EvolutionArrow color="gray-400" />}
-                <div className="evolution-sprite-outer-panel">
-                  <div className="evo-single-sprite-panel">
-                    <div className={`evo-image-panel ${gradientClass}`}>
-                      {isLoading ? (
-                        <div className="evo-loading-panel">
-                          <div className="evo-spinner"></div>
-                        </div>
-                      ) : (
-                        <motion.img
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 1, delay: idx }}
-                          src={getSpriteUrl(pokemonData)}
-                          alt={name}
-                          className="evo-image"
-                        />
-                      )}
-                    </div>
-                  </div>
-                  <div className="evo-details justify-start  min-w-[120px] mt-4">
-                    <Link
-                      to={`/pokemon/${name}`}
-                      className="evo-name text-center hover:text-blue-500 transition-colors"
-                    >
-                      {name}
-                    </Link>
-                    <div className="pokemon-card-types mt-1">
-                      {pokemonData?.types?.map((type: PokemonType) => (
-                        <TypeLogoBadge
-                          key={type.type.name}
-                          type={type.type.name}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </Fragment>
-            );
-          })}
+          {evolutionPath.previous.map((name, idx) => (
+            <EvolutionPokemon
+              key={name}
+              isFirst={idx === 0}
+              name={name}
+              pokemonData={pokemonCache[name]}
+              isLoading={!pokemonCache[name]}
+              getSpriteUrl={getSpriteUrl}
+              delay={idx}
+            />
+          ))}
         </div>
       )}
-      <EvolutionArrow />
-      {/* Target Pokémon */}
-      <div className="evolution-sprite-outer-panel p-2">
-        {(() => {
-          const pokemonData = pokemonCache[pokemonName];
-          const isLoading = !pokemonData;
-          const gradientClass = getPokemonGradientClass(pokemonData);
 
-          return (
-            <>
-              <div className="evo-single-sprite-panel">
-                <div
-                  className={`evo-image-panel ${gradientClass} shadow-black ring-3 ring-blue-400 p-2`}
-                >
-                  {isLoading ? (
-                    <div className="evo-loading-panel">
-                      <div className="evo-spinner"></div>
-                    </div>
-                  ) : (
-                    <motion.img
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 1, delay: prevCount * 1 }}
-                      src={getSpriteUrl(pokemonData)}
-                      alt={pokemonName}
-                      className="evo-image"
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="evo-details justify-start min-w-[120px]">
-                <span className="evo-name">{pokemonName}</span>
-                <div className="pokemon-card-types mt-1">
-                  {pokemonData?.types?.map((type: PokemonType) => (
-                    <TypeLogoBadge key={type.type.name} type={type.type.name} />
-                  ))}
-                </div>
-                {(() => {
-                  const prevDetail = getPrevEvolutionDetail(0);
-                  return prevDetail ? (
-                    <div className="evo-trigger-details">
-                      <EvolutionDescription evolutionDetail={prevDetail} />
-                    </div>
-                  ) : null;
-                })()}
-              </div>
-            </>
-          );
+      {/* Target Pokémon */}
+      <EvolutionPokemon
+        isFirst={false}
+        name={pokemonName}
+        pokemonData={pokemonCache[pokemonName]}
+        isLoading={!pokemonCache[pokemonName]}
+        getSpriteUrl={getSpriteUrl}
+        delay={prevCount}
+        isTarget={true}
+      >
+        {(() => {
+          const prevDetail = getPrevEvolutionDetail(0);
+          return prevDetail ? (
+            <div className="evo-trigger-details">
+              <EvolutionDescription evolutionDetail={prevDetail} />
+            </div>
+          ) : null;
         })()}
-      </div>
+      </EvolutionPokemon>
       {/* Next evolutions */}
       {evolutionPath.next.length > 0 && (
-        <div className="flex flex-row md:flex-col p-2 items-center min-h-[200px]">
+        <div className="flex flex-row md:flex-col items-center min-h-[200px]">
           {evolutionPath.next.map((name) => {
             const pokemonData = pokemonCache[name];
             const isLoading = !pokemonData;
             const evolutionDetail = getNextEvolutionDetail(name);
-            const gradientClass = getPokemonGradientClass(pokemonData);
             return (
-              <div key={name} className="flex flex-row items-center">
-                <EvolutionArrow />
-                <div className="evolution-sprite-outer-panel ml-5">
-                  <div className="evo-single-sprite-panel">
-                    <div className={`evo-image-panel ${gradientClass}`}>
-                      {isLoading ? (
-                        <div className="evo-loading-panel">
-                          <div className="evo-spinner"></div>
-                        </div>
-                      ) : (
-                        <motion.img
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 1, delay: prevCount + 1 }}
-                          src={getSpriteUrl(pokemonData)}
-                          alt={name}
-                          className="evo-image"
-                        />
-                      )}
-                    </div>
+              <EvolutionPokemon
+                key={name}
+                isFirst={false}
+                name={name}
+                pokemonData={pokemonData}
+                isLoading={isLoading}
+                getSpriteUrl={getSpriteUrl}
+                delay={prevCount + 1}
+                className={`${
+                  evolutionPath.next.length > 1 ? "max-h-1/2 min-w-1/2" : ""
+                }`}
+              >
+                {evolutionDetail && (
+                  <div className="evo-trigger-details">
+                    <EvolutionDescription evolutionDetail={evolutionDetail} />
                   </div>
-                  <div className="evo-details justify-start min-w-[120px]">
-                    <Link
-                      to={`/pokemon/${name}`}
-                      className="evo-name hover:text-blue-500 transition-colors"
-                    >
-                      {name}
-                    </Link>
-                    <div className="pokemon-card-types mt-1">
-                      {pokemonData?.types?.map((type: PokemonType) => (
-                        <TypeLogoBadge
-                          key={type.type.name}
-                          type={type.type.name}
-                        />
-                      ))}
-                    </div>
-                    {evolutionDetail && (
-                      <div className="evo-trigger-details">
-                        <EvolutionDescription
-                          evolutionDetail={evolutionDetail}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+                )}
+              </EvolutionPokemon>
             );
           })}
         </div>
