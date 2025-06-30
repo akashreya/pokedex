@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useMultiplePokemon } from "../../../hooks/useMultiplePokemon";
 import { getPokemonGradientClass } from "@/utils/pokemonUtils";
 import { EvolutionDescription, EvolutionArrow } from "./index";
@@ -32,6 +33,8 @@ export default function EvolutionMidBranch({
     pokemonName,
     ...evolutionPath.next,
   ];
+
+  const prevCount = evolutionPath.previous.length;
 
   // Fetch all Pokémon data using the hook
   const pokemonCache = useMultiplePokemon(allPokemonNames);
@@ -95,7 +98,10 @@ export default function EvolutionMidBranch({
                           <div className="evo-spinner"></div>
                         </div>
                       ) : (
-                        <img
+                        <motion.img
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 1, delay: idx }}
                           src={getSpriteUrl(pokemonData)}
                           alt={name}
                           className="evo-image"
@@ -144,7 +150,10 @@ export default function EvolutionMidBranch({
                       <div className="evo-spinner"></div>
                     </div>
                   ) : (
-                    <img
+                    <motion.img
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 1, delay: prevCount * 1 }}
                       src={getSpriteUrl(pokemonData)}
                       alt={pokemonName}
                       className="evo-image"
@@ -191,7 +200,10 @@ export default function EvolutionMidBranch({
                           <div className="evo-spinner"></div>
                         </div>
                       ) : (
-                        <img
+                        <motion.img
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 1, delay: prevCount + 1 }}
                           src={getSpriteUrl(pokemonData)}
                           alt={name}
                           className="evo-image"

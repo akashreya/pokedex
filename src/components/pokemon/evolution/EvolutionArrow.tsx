@@ -6,9 +6,15 @@ interface EvolutionArrowProps {
 
 const EvolutionArrow: FC<EvolutionArrowProps> = ({ color = "gray-600" }) => {
   return (
-    <div className="flex items-center h-[200px]">
-      <span className={`text-2xl text-${color} mx-1 hidden md:inline`}>→</span>
-      <span className={`text-2xl text-${color} mx-1 md:hidden`}>↓</span>
+    <div className="flex items-center justify-center h-[200px]">
+      <span
+        className={`text-2xl text-${color} mx-1 hidden md:inline scale-300`}
+      >
+        →
+      </span>
+      <span className={`text-2xl text-${color} mx-1 md:hidden scale-600`}>
+        ↓
+      </span>
     </div>
   );
 };

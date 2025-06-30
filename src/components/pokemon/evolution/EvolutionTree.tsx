@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import type { EvolutionNode } from "../../../services/evolutionService";
 import { EvolutionDescription, EvolutionArrow } from "./index";
 import { getPokemonGradientClass } from "@/utils/pokemonUtils";
+
 // @ts-ignore
 import TypeLogoBadge from "../../ui/TypeLogoBadge";
 
@@ -23,21 +25,26 @@ export default function EvolutionTree({
   pokemonName,
   getSpriteUrl,
 }: EvolutionTreeProps) {
-  const renderEvolutionTree = (node: EvolutionNode): React.ReactNode => {
+  const BASE_DELAY = 1; // seconds
+
+  const renderEvolutionTree = (
+    node: EvolutionNode,
+    delay: number = 0
+  ): React.ReactNode => {
     const isTarget = node.name === pokemonName;
     const gradientClass = getPokemonGradientClass(node.pokemonData);
     return (
-      <div
-        className={`evolution-inner-panel 
-          ${node.evolvesTo.length > 1 ? "" : "md:items-start"}  `}
-      >
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4">
         <div className="evolution-sprite-outer-panel">
           <div className="evo-single-sprite-panel">
             <div
               className={`evo-image-panel ${gradientClass}
               ${isTarget ? "ring-3 ring-blue-400 p-2" : ""}`}
             >
-              <img
+              <motion.img
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay }}
                 src={getSpriteUrl(node.pokemonData)}
                 alt={node.name}
                 className="evo-image"
@@ -76,11 +83,13 @@ export default function EvolutionTree({
               <EvolutionArrow />
             </div>
             {node.evolvesTo.length === 1 ? (
-              renderEvolutionTree(node.evolvesTo[0])
+              renderEvolutionTree(node.evolvesTo[0], delay + BASE_DELAY)
             ) : (
               <div className="hero-content">
                 {node.evolvesTo.map((evo: EvolutionNode, idx: number) => (
-                  <div key={evo.name + idx}>{renderEvolutionTree(evo)}</div>
+                  <div key={evo.name + idx}>
+                    {renderEvolutionTree(evo, (delay + 1) * BASE_DELAY)}
+                  </div>
                 ))}
               </div>
             )}
@@ -92,7 +101,7 @@ export default function EvolutionTree({
 
   return (
     <div className="flex justify-center">
-      {renderEvolutionTree(evolutionTree)}
+      {renderEvolutionTree(evolutionTree, 0)}
     </div>
   );
 }
