@@ -47,8 +47,17 @@ export default function PokemonEvolution({ pokemon }: PokemonEvolutionProps) {
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // Use the evolution path hook
-  const { data: evolutionPath, loading, error } = useEvolutionPath(pokemon.id);
+  let evolutionPath, loading, error;
+  if (pokemon.id <= 1025) {
+    const evo = useEvolutionPath(pokemon.id);
+    evolutionPath = evo.data;
+    loading = evo.loading;
+    error = evo.error;
+  } else {
+    evolutionPath = null;
+    loading = false;
+    error = null;
+  }
 
   // Enhanced error handling and data validation
   useEffect(() => {
@@ -88,68 +97,75 @@ export default function PokemonEvolution({ pokemon }: PokemonEvolutionProps) {
     >
       <h2 className="evo-heading">Evolution</h2>
 
-      {!loading && (hasError || error) && (
-        <EvolutionError errorMessage={errorMessage} />
+      {/* Show coming soon for unreleased Pokémon */}
+      {pokemon.id > 1025 ? (
+        <div className="evo-coming-soon">Coming soon</div>
+      ) : (
+        <>
+          {!loading && (hasError || error) && (
+            <EvolutionError errorMessage={errorMessage} />
+          )}
+
+          {loading && <EvolutionLoading />}
+
+          {/* If no evolution path or single-stage Pokémon */}
+          {!loading &&
+            (!evolutionPath ||
+              (evolutionPath.previous.length === 0 &&
+                evolutionPath.next.length === 0)) && (
+              <EvolutionSingleStage evolutionPath={evolutionPath} />
+            )}
+
+          {/* Render: complete-tree (base form) */}
+          {!loading &&
+            evolutionPath?.resultType === "complete-tree" &&
+            evolutionPath.evolutionTree && (
+              <EvolutionTree
+                evolutionTree={evolutionPath.evolutionTree}
+                pokemonID={pokemon.id}
+                getSpriteUrl={getSpriteUrl}
+              />
+            )}
+
+          {/* Render: linear-path (final evolution) */}
+          {!loading &&
+            evolutionPath?.resultType === "linear-path" &&
+            evolutionPath.evolutionPath &&
+            evolutionPath.evolutionPath.length > 0 && (
+              <EvolutionLinearPath
+                evolutionPath={evolutionPath.evolutionPath}
+                pokemonName={pokemon.name}
+                getSpriteUrl={getSpriteUrl}
+                evolutionDetails={evolutionPath.evolutionDetails ?? []}
+              />
+            )}
+
+          {/* Render: mid-evolution (branching) */}
+          {!loading && evolutionPath?.resultType === "mid-evolution" && (
+            <EvolutionMidBranch
+              evolutionPath={evolutionPath}
+              pokemonName={pokemon.name}
+              getSpriteUrl={getSpriteUrl}
+            />
+          )}
+
+          {/* Default fallback rendering */}
+          {!loading &&
+            evolutionPath &&
+            evolutionPath.previous.length > 0 &&
+            evolutionPath.next.length > 0 &&
+            !evolutionPath.resultType && (
+              <EvolutionDefault
+                evolutionPath={evolutionPath}
+                pokemonName={pokemon.name}
+                getSpriteUrl={getSpriteUrl}
+                evolutionDetails={evolutionPath.evolutionDetails
+                  ?.map((evo) => evo.details[0])
+                  .filter(Boolean)}
+              />
+            )}
+        </>
       )}
-
-      {loading && <EvolutionLoading />}
-
-      {/* If no evolution path or single-stage Pokémon */}
-      {!loading &&
-        (!evolutionPath ||
-          (evolutionPath.previous.length === 0 &&
-            evolutionPath.next.length === 0)) && (
-          <EvolutionSingleStage evolutionPath={evolutionPath} />
-        )}
-
-      {/* Render: complete-tree (base form) */}
-      {!loading &&
-        evolutionPath?.resultType === "complete-tree" &&
-        evolutionPath.evolutionTree && (
-          <EvolutionTree
-            evolutionTree={evolutionPath.evolutionTree}
-            pokemonID={pokemon.id}
-            getSpriteUrl={getSpriteUrl}
-          />
-        )}
-
-      {/* Render: linear-path (final evolution) */}
-      {!loading &&
-        evolutionPath?.resultType === "linear-path" &&
-        evolutionPath.evolutionPath &&
-        evolutionPath.evolutionPath.length > 0 && (
-          <EvolutionLinearPath
-            evolutionPath={evolutionPath.evolutionPath}
-            pokemonName={pokemon.name}
-            getSpriteUrl={getSpriteUrl}
-            evolutionDetails={evolutionPath.evolutionDetails ?? []}
-          />
-        )}
-
-      {/* Render: mid-evolution (branching) */}
-      {!loading && evolutionPath?.resultType === "mid-evolution" && (
-        <EvolutionMidBranch
-          evolutionPath={evolutionPath}
-          pokemonName={pokemon.name}
-          getSpriteUrl={getSpriteUrl}
-        />
-      )}
-
-      {/* Default fallback rendering */}
-      {!loading &&
-        evolutionPath &&
-        evolutionPath.previous.length > 0 &&
-        evolutionPath.next.length > 0 &&
-        !evolutionPath.resultType && (
-          <EvolutionDefault
-            evolutionPath={evolutionPath}
-            pokemonName={pokemon.name}
-            getSpriteUrl={getSpriteUrl}
-            evolutionDetails={evolutionPath.evolutionDetails
-              ?.map((evo) => evo.details[0])
-              .filter(Boolean)}
-          />
-        )}
     </motion.div>
   );
 }
