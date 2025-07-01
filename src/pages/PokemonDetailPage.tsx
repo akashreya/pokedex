@@ -270,7 +270,9 @@ export default function PokemonDetailPage() {
             />
           </div>
           <div className="pokemon-detail-searchbar">
-            <SearchBar />
+            <SearchBar
+              onSelect={(name: string) => navigate(`/pokemon/${name}`)}
+            />
           </div>
         </div>
 

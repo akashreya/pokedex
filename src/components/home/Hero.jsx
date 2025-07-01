@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import SearchBar from "./SearchBar";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
+  const navigate = useNavigate();
   return (
     <section className="hero">
       <Card className="hero-card">
@@ -26,7 +28,7 @@ export default function Hero() {
             Explore the vast collection of Pokémon, their types, abilities, and
             more.
           </p>
-          <SearchBar />
+          <SearchBar onSelect={(name) => navigate(`/pokemon/${name}`)} />
         </div>
       </Card>
     </section>

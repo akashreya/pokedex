@@ -28,6 +28,12 @@ export default function Header() {
         >
           Pokémon
         </Link>
+        <Link
+          to="/wordle"
+          className="hover:underline text-gray-900 dark:text-gray-300 text-sm md:text-3xl"
+        >
+          Wordle
+        </Link>
         <DarkModeToggle />
       </nav>
     </header>

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import PokemonListing from "./pages/PokemonListingPage";
 import PokemonDetailPage from "./pages/PokemonDetailPage";
+import PokemonWordlePage from "./pages/PokemonWordlePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
@@ -37,6 +38,7 @@ function App() {
                   </PokemonProvider>
                 }
               />
+              <Route path="/wordle" element={<PokemonWordlePage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </AnimatePresence>
