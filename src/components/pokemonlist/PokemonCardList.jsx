@@ -31,7 +31,9 @@ export default function PokemonCardList({ pokemon, index = 0 }) {
               loading="lazy"
             />
           </span>
-          <span className="pokemon-card-name">{pokemon.name}</span>
+          <span className="pokemon-card-name truncate max-w-[120px] inline-block">
+            {pokemon.name}
+          </span>
         </div>
         <div className="pokemon-card-types">
           {pokemon.types?.map((type) => (
