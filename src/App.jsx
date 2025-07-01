@@ -29,7 +29,14 @@ function App() {
                   </PokemonProvider>
                 }
               />
-              <Route path="/pokemon/:id" element={<PokemonDetailPage />} />
+              <Route
+                path="/pokemon/:id"
+                element={
+                  <PokemonProvider>
+                    <PokemonDetailPage />
+                  </PokemonProvider>
+                }
+              />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </AnimatePresence>

@@ -17,6 +17,7 @@ import { usePokemonSpecies } from "../hooks/usePokemonSpecies";
 import { useMultiplePokemon } from "../hooks/useMultiplePokemon";
 import SearchBar from "../components/home/SearchBar.jsx";
 import Carousel from "../components/ui/Carousel";
+import { usePokemonContext } from "@/context/PokemonContext";
 
 export default function PokemonDetailPage() {
   const { id } = useParams();
@@ -34,6 +35,7 @@ export default function PokemonDetailPage() {
   const touchEndY = useRef<number | null>(null);
   const navigationByButtonRef = useRef(false);
   const [showSpinner, setShowSpinner] = useState(false);
+  const { currentRegion } = usePokemonContext();
 
   // Tab configuration
   const TAB_ITEMS = ["about", "stats", "moves", "evolution"];
@@ -260,6 +262,7 @@ export default function PokemonDetailPage() {
                     pokemonWeightRange:
                       localStorage.getItem("pokemonWeightRange"),
                     pokemonViewMode: localStorage.getItem("pokemonViewMode"),
+                    pokemonRegion: currentRegion,
                   },
                 },
                 { label: pokemon.name, isCurrent: true },

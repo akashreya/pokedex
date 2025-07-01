@@ -79,7 +79,7 @@ export default function PokemonListing() {
   const [weightRange, setWeightRange] = useState(persisted.weightRange);
   const [currentPage, setCurrentPage] = useState(persisted.currentPage);
   const gridItemsPerPage = 10;
-  const listItemsPerPage = 40;
+  const listItemsPerPage = 50;
 
   // Ref for header
   const mainRef = useRef(null);
@@ -90,6 +90,8 @@ export default function PokemonListing() {
     loading: contextLoading,
     error: contextError,
     fetchPokemonList,
+    currentRegion,
+    setCurrentRegion,
   } = usePokemonContext();
   const {
     data: pagedData,
@@ -117,6 +119,8 @@ export default function PokemonListing() {
         setWeightRange(JSON.parse(location.state.pokemonWeightRange));
       if (location.state.pokemonViewMode)
         setViewMode(location.state.pokemonViewMode);
+      if (location.state.pokemonRegion)
+        setCurrentRegion(location.state.pokemonRegion);
     }
 
     // eslint-disable-next-line
@@ -133,6 +137,7 @@ export default function PokemonListing() {
     sortBy,
     viewMode,
     debouncedSearch,
+    currentRegion,
   ]);
 
   // Debounce search
