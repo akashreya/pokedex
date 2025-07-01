@@ -7,13 +7,13 @@ import TypeLogoBadge from "../../ui/TypeLogoBadge";
 
 interface EvolutionTreeProps {
   evolutionTree: EvolutionNode;
-  pokemonName: string;
+  pokemonID: number;
   getSpriteUrl: (pokemonData: any) => string;
 }
 
 export default function EvolutionTree({
   evolutionTree,
-  pokemonName,
+  pokemonID,
   getSpriteUrl,
 }: EvolutionTreeProps) {
   const BASE_DELAY = 1; // seconds
@@ -22,11 +22,12 @@ export default function EvolutionTree({
     node: EvolutionNode,
     delay: number = 0
   ): React.ReactNode => {
-    const isTarget = node.name === pokemonName;
+    const isTarget = node.id === pokemonID;
+
     return (
       <div className="flex flex-col md:flex-row items-center justify-center gap-4">
         <EvolutionPokemon
-          isFirst={node.name === pokemonName}
+          isFirst={node.id === pokemonID}
           name={node.name}
           pokemonData={node.pokemonData}
           isLoading={false}

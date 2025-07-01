@@ -5,8 +5,8 @@ import TypeLogoBadge from "../../ui/TypeLogoBadge";
 
 interface EvolutionMidBranchProps {
   evolutionPath: {
-    previous: string[];
-    next: string[];
+    previous: string[] | number[];
+    next: string[] | number[];
     evolutionMethods?: any;
   };
   pokemonName: string;
@@ -46,7 +46,7 @@ export default function EvolutionMidBranch({
   };
 
   // Helper: get evolutionDetails for next step
-  const getNextEvolutionDetail = (name: string) => {
+  const getNextEvolutionDetail = (name: number | string) => {
     if (
       evolutionPath.evolutionMethods &&
       evolutionPath.evolutionMethods.evolvesTo &&
@@ -73,17 +73,20 @@ export default function EvolutionMidBranch({
       {/* Previous evolution path */}
       {evolutionPath.previous.length > 0 && (
         <div className="flex items-center gap-4">
-          {evolutionPath.previous.map((name, idx) => (
-            <EvolutionPokemon
-              key={name}
-              isFirst={idx === 0}
-              name={name}
-              pokemonData={pokemonCache[name]}
-              isLoading={!pokemonCache[name]}
-              getSpriteUrl={getSpriteUrl}
-              delay={idx}
-            />
-          ))}
+          {evolutionPath.previous.map((name, idx) => {
+            const data = pokemonCache[name];
+            return (
+              <EvolutionPokemon
+                key={name}
+                isFirst={idx === 0}
+                name={name}
+                pokemonData={data}
+                isLoading={!data}
+                getSpriteUrl={getSpriteUrl}
+                delay={idx}
+              />
+            );
+          })}
         </div>
       )}
 

@@ -13,7 +13,7 @@ interface PokemonType {
 
 interface EvolutionPokemonProps {
   isFirst?: boolean;
-  name: string;
+  name: string | number;
   pokemonData: any;
   isLoading: boolean;
   getSpriteUrl: (pokemonData: any) => string;
@@ -36,7 +36,6 @@ export default function EvolutionPokemon({
   isTarget = false,
 }: EvolutionPokemonProps) {
   const gradientClass = getPokemonGradientClass(pokemonData);
-
   return (
     <div
       className={`flex flex-col md:flex-row items-center md:items-start pb-2 ${className}`}
@@ -65,7 +64,7 @@ export default function EvolutionPokemon({
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, delay: delay || 0 }}
                 src={getSpriteUrl(pokemonData)}
-                alt={name}
+                alt={pokemonData.name}
                 className="evo-image"
               />
             )}
@@ -73,13 +72,13 @@ export default function EvolutionPokemon({
         </div>
         <div className="evo-details">
           {isTarget ? (
-            <span className="evo-name">{name}</span>
+            <span className="evo-name">{pokemonData?.name}</span>
           ) : (
             <Link
               to={`/pokemon/${name}`}
               className="evo-name transition-colors duration-200 hover:text-blue-500 "
             >
-              {name}
+              {pokemonData?.name}
             </Link>
           )}
           <div className="pokemon-card-types mt-1">

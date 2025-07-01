@@ -4,7 +4,7 @@ import { EvolutionDescription, EvolutionPokemon } from "./index";
 import TypeLogoBadge from "../../ui/TypeLogoBadge";
 
 interface EvolutionLinearPathProps {
-  evolutionPath: string[];
+  evolutionPath: number[];
   pokemonName: string;
   getSpriteUrl: (pokemonData: any, fallbackId?: string | number) => string;
   evolutionDetails: (any | null)[];
@@ -21,18 +21,18 @@ export default function EvolutionLinearPath({
 
   return (
     <div className="evolution-inner-panel md:items-start">
-      {evolutionPath.map((name, idx) => {
-        const pokemonData = pokemonCache[name];
+      {evolutionPath.map((id, idx) => {
+        const pokemonData = pokemonCache[id];
         return (
           <EvolutionPokemon
-            key={name}
+            key={id}
             isFirst={idx === 0}
-            name={name}
+            name={pokemonData?.name || String(id)}
             pokemonData={pokemonData}
             isLoading={!pokemonData}
             getSpriteUrl={getSpriteUrl}
             delay={idx}
-            isTarget={name === pokemonName}
+            isTarget={pokemonData?.name === pokemonName}
           >
             {/* Render evolution description if available */}
             {evolutionDetails && evolutionDetails[idx] && (

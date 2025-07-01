@@ -6,8 +6,8 @@ import TypeLogoBadge from "../../ui/TypeLogoBadge";
 
 interface EvolutionDefaultProps {
   evolutionPath: {
-    previous: string[];
-    next: string[];
+    previous: string[] | number[];
+    next: string[] | number[];
     evolutionMethods?: any;
   };
   pokemonName: string;
@@ -21,7 +21,6 @@ export default function EvolutionDefault({
   getSpriteUrl,
   evolutionDetails,
 }: EvolutionDefaultProps) {
-  console.log(evolutionPath);
   // Get all Pokémon names from the evolution path
   const allPokemonNames = [
     ...evolutionPath.previous,

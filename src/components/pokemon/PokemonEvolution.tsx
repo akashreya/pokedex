@@ -8,6 +8,7 @@ import {
   EvolutionLinearPath,
   EvolutionMidBranch,
   EvolutionDefault,
+  EvolutionLoading,
 } from "./evolution";
 import {
   getSpriteUrl,
@@ -91,6 +92,8 @@ export default function PokemonEvolution({ pokemon }: PokemonEvolutionProps) {
         <EvolutionError errorMessage={errorMessage} />
       )}
 
+      {loading && <EvolutionLoading />}
+
       {/* If no evolution path or single-stage Pokémon */}
       {!loading &&
         (!evolutionPath ||
@@ -105,7 +108,7 @@ export default function PokemonEvolution({ pokemon }: PokemonEvolutionProps) {
         evolutionPath.evolutionTree && (
           <EvolutionTree
             evolutionTree={evolutionPath.evolutionTree}
-            pokemonName={pokemon.name}
+            pokemonID={pokemon.id}
             getSpriteUrl={getSpriteUrl}
           />
         )}
