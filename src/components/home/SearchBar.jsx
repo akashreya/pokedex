@@ -11,6 +11,13 @@ function debounce(fn, delay) {
   };
 }
 
+// Flatten POKEMON list to include all forms as individual entries
+const FLATTENED_POKEMON = POKEMON.flatMap((p) =>
+  Array.isArray(p.value)
+    ? p.value.map((name) => ({ id: p.id, name }))
+    : [{ id: p.id, name: p.value }]
+);
+
 export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -21,7 +28,7 @@ export default function SearchBar() {
 
   // Filter suggestions based on query
   const filtered = query
-    ? POKEMON.map((p) => p.value.toLowerCase())
+    ? FLATTENED_POKEMON.map((p) => p.name.toLowerCase())
         .filter((name) => name.includes(query.toLowerCase()))
         .slice(0, 8)
     : [];

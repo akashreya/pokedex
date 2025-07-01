@@ -79,7 +79,7 @@ export default function PokemonListing() {
   const [weightRange, setWeightRange] = useState(persisted.weightRange);
   const [currentPage, setCurrentPage] = useState(persisted.currentPage);
   const gridItemsPerPage = 10;
-  const listItemsPerPage = 50;
+  const listItemsPerPage = 40;
 
   // Ref for header
   const mainRef = useRef(null);

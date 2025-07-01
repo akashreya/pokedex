@@ -274,11 +274,11 @@ export default function PokemonDetailPage() {
         {/* Floating Navigation Arrows */}
         <button
           onClick={goToPrevious}
-          disabled={pokemon.id <= 1}
+          disabled={pokemon.id <= 1 || pokemon.id > 1025}
           aria-label="Previous Pokémon"
           className={`pokemon-detail-left-arrow-button
             ${
-              pokemon.id <= 1
+              pokemon.id <= 1 || pokemon.id > 1025
                 ? "opacity-40 cursor-not-allowed"
                 : "cursor-pointer"
             }`}
@@ -318,8 +318,8 @@ export default function PokemonDetailPage() {
             exit="exit"
             transition={{
               type: "spring",
-              duration: 0.2,
-              visualDuration: 0.9,
+              duration: 0.3,
+              visualDuration: 0.3,
               ease: "easeInOut",
             }}
             className={`pokemon-detail-background ${getGradientClass(
