@@ -8,6 +8,7 @@ import FilterSidebar from "../components/pokemonlist/FilterSidebar";
 import ToggleSwitch from "../components/ui/ToggleSwitch";
 import PokemonGridLayout from "../components/pokemonlist/PokemonGridLayout";
 import PokemonListLayout from "../components/pokemonlist/PokemonListLayout";
+import ReactGA from "react-ga4";
 
 const ALL_TYPES = [
   "normal",
@@ -91,7 +92,7 @@ export default function PokemonListing() {
     error: contextError,
     fetchPokemonList,
     currentRegion,
-    setCurrentRegion,
+    setCurrentRegion: contextSetCurrentRegion,
   } = usePokemonContext();
   const {
     data: pagedData,
@@ -268,6 +269,16 @@ export default function PokemonListing() {
     }
   }, [currentPage]);
 
+  // Handler for region change with analytics
+  const setCurrentRegion = (region) => {
+    ReactGA.event({
+      category: "Pokemon",
+      action: "Region Change",
+      label: region,
+    });
+    contextSetCurrentRegion(region);
+  };
+
   return (
     <section className="pokemonlisting-section">
       {/* Header */}
@@ -304,6 +315,7 @@ export default function PokemonListing() {
             setWeightRange={setWeightRange}
             clearFilters={clearFilters}
             onClose={() => setSidebarOpen(false)}
+            setCurrentRegion={setCurrentRegion}
           />
         </aside>
 

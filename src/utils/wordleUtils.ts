@@ -3,12 +3,13 @@ import { getPokemonList } from '../services/pokedexapi';
 import { POKEMON } from '../constants/Pokemon';
 import { getWordlePokemonData } from '../services/pokemonWordleService';
 
+
 /**
  * Fetches the Pokémon of the day based on the current date and difficulty.
  * Uses the POKEMON array for deterministic selection, then fetches data from API.
  * Returns a Pokémon data object for the day.
  */
-export async function getDailyPokemon(difficulty: 'easy' | 'medium' | 'hard' = 'medium') {
+export async function getDailyPokemon(difficulty: null | 'easy' | 'medium' | 'hard' = 'medium') {
   // Filter by difficulty (easy = Gen 1-3, medium = Gen 1-6, hard = all)
   let filteredPokemon = POKEMON;
   if (difficulty === 'easy') {
@@ -143,6 +144,79 @@ export async function getPokemonIdByName(name: string): Promise<number | undefin
   return entry?.id;
 }
 
+/**
+ * Generates a spoiler-free shareable text representation of the game using emojis.
+ * Similar to Wordle's share feature with colored squares representing feedback.
+ */
+export function generateShareableText(
+  guesses: GuessResult[],
+  gameStatus: 'won' | 'lost' | 'playing',
+  difficulty: 'easy' | 'medium' | 'hard',
+  targetPokemonName?: string,
+  minimalPreview: boolean = false
+): string {
+  const difficultyText = difficulty.toUpperCase();
+  const statusEmoji = gameStatus === 'won' ? '🎉' : gameStatus === 'lost' ? '😞' : '🎮';
+  const attemptsText = gameStatus === 'won' ? `${guesses.length}/6` : '6/6';
+
+  let result = `🎮 Pokémon Wordle (${difficultyText}) ${statusEmoji}\n`;
+  result += `${attemptsText} attempts\n\n`;
+
+  // Generate emoji grid for each guess
+  guesses.forEach((guess) => {
+    const { feedback } = guess;
+    let row = '';
+
+    // Type 1
+    row += feedback.type1 === 'correct' ? '🟩' :
+      feedback.type1 === 'partial' ? '🟨' : '🟥';
+
+    // Type 2
+    row += feedback.type2 === 'correct' ? '🟩' :
+      feedback.type2 === 'partial' ? '🟨' : '🟥';
+
+    // Generation
+    row += feedback.generation === 'correct' ? '🟩' :
+      feedback.generation === 'higher' ? '⬆️' : '⬇️';
+
+    // Evolution Stage
+    row += feedback.evolutionStage === 'correct' ? '🟩' :
+      feedback.evolutionStage === 'higher' ? '⬆️' : '⬇️';
+
+    // Color
+    row += feedback.color === 'correct' ? '🟩' : '🟥';
+
+    // Habitat
+    row += feedback.habitat === 'correct' ? '🟩' : '🟥';
+
+    // Height
+    row += feedback.height === 'correct' ? '🟩' :
+      feedback.height === 'higher' ? '⬆️' : '⬇️';
+
+    // Weight
+    row += feedback.weight === 'correct' ? '🟩' :
+      feedback.weight === 'higher' ? '⬆️' : '⬇️';
+
+    // Legendary
+    row += feedback.isLegendary === 'correct' ? '🟩' : '🟥';
+
+    // Mythical
+    row += feedback.isMythical === 'correct' ? '🟩' : '🟥';
+
+    result += row + '\n';
+  });
+
+  if (!minimalPreview) {
+    // Add legend
+    result += '\n🟩=Correct 🟨=Partial 🟥=Wrong ⬆️=Higher ⬇️=Lower';
+    // Add pokemon name only if game is over
+    if (gameStatus !== 'playing' && targetPokemonName) {
+      result += `\n\nThe Pokémon was: ${targetPokemonName}`;
+    }
+  }
+
+  return result;
+}
 
 // Example usage (async context):
 // const allPokemon = await fetchAllPokemonPaginated();

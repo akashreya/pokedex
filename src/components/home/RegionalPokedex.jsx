@@ -1,8 +1,10 @@
 import { REGIONS } from "../../constants/PokemonRegions";
 import Carousel from "../ui/Carousel";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { BorderBeam } from "../ui/border-beam";
 
 export default function RegionalPokedex() {
+  const navigate = useNavigate();
   const renderRegion = (region) => (
     <div className="regional-card">
       <div className="regional-card-images">
@@ -16,7 +18,7 @@ export default function RegionalPokedex() {
 
   return (
     <section className="regional-dex">
-      <h2 className="font-pokemon-solid text-center">Regional Pokédex</h2>
+      <h2 className="font-pokemon-solid">Regional Pokédex</h2>
       <div className="regional-dex-content group">
         <Carousel
           items={REGIONS}
@@ -28,17 +30,26 @@ export default function RegionalPokedex() {
           showDotIndicators={false}
           autoPlay={true}
         />
-        <Link
-          to="/pokemon"
-          className="px-6 py-2 rounded-full 
-          bg-gradient-to-bl from-[#CC95C0] via-[#DBD4B4] to-[#7AA1D2]
-          dark:bg-gradient-to-br dark:from-[#434343] dark:via-[#152331] dark:to-[#000000]
-          font-poppins
-          shadow-sm shadow-blue-900 dark:shadow-amber-400 font-poppins
-          hover:scale-110 transition-all duration-200"
-        >
-          Browse by Region
-        </Link>
+        <div className="relative inline-block overflow-hidden rounded-full mb-4">
+          <button
+            type="button"
+            onClick={() => navigate("/pokemon")}
+            className="relative px-10 py-2 font-poppins font-semibold font-Montserrat 
+              rounded-2xl text-xl
+              bg-gradient-to-bl from-[#232526] to-[#414345]
+              dark:bg-gradient-to-b dark:from-yellow-700 dark:to-yellow-400 
+              text-yellow-400 dark:text-[#232526] shadow-md
+              hover:scale-105 hover:shadow-lg transition-all duration-200"
+          >
+            Browse by Region
+          </button>
+          <BorderBeam
+            size={40}
+            duration={8}
+            className="from-transparent via-yellow-200 to-transparent dark:via-[#232526]"
+            borderWidth={3}
+          />
+        </div>
       </div>
     </section>
   );

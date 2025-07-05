@@ -30,8 +30,8 @@ export interface GuessResult {
 
 export interface GameState {
   currentDate: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  targetPokemon: PokemonWordleData;
+  difficulty: null | 'easy' | 'medium' | 'hard';
+  targetPokemon: PokemonWordleData | null;
   guesses: GuessResult[];
   gameStatus: 'playing' | 'won' | 'lost';
   statistics: {
@@ -41,4 +41,5 @@ export interface GameState {
     maxStreak: number;
     winRate: number;
   };
+  version: number;
 }

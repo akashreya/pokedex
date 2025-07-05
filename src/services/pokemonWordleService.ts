@@ -1,6 +1,6 @@
 import { fetchFromApi } from "./api";
 import { PokemonWordleData } from "../types/WordleTypes";
-import { Pokemon, PokemonSpecies, EvolutionChain } from "./pokedexapi";
+import { Pokemon, EvolutionChain } from "./pokedexapi";
 
 const POKEAPI_BASE_URL = 'https://pokeapi.co/api/v2';
 

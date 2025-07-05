@@ -2,12 +2,26 @@ import { getGradientClass } from "../../utils/pokemonUtils";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import TypeLogoBadge from "../ui/TypeLogoBadge";
+import ReactGA from "react-ga4";
 
 export default function PokemonCardList({ pokemon, index = 0 }) {
   const type1 = pokemon?.types?.[0]?.type?.name;
   const type2 = pokemon?.types?.[1]?.type?.name || type1;
+
+  const handleCardClick = () => {
+    ReactGA.event({
+      category: "Pokemon",
+      action: "Card Click",
+      label: `${pokemon.name} (#${pokemon.id})`,
+    });
+  };
+
   return (
-    <Link to={`/pokemon/${pokemon.id}`} className="block focus:outline-none">
+    <Link
+      to={`/pokemon/${pokemon.id}`}
+      className="block focus:outline-none"
+      onClick={handleCardClick}
+    >
       <motion.div
         className={`pokemon-card-list  ${getGradientClass(type1, type2)}`}
         initial={{ opacity: 0, scale: 0 }}

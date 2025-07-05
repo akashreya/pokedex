@@ -1,6 +1,5 @@
 import { usePokemonContext } from "@/context/PokemonContext";
 import { Slider } from "antd";
-import "antd/dist/reset.css";
 import { TYPE_COLORS } from "@/constants/PokemonTypes";
 
 const ALL_TYPES = Object.keys(TYPE_COLORS);

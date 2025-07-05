@@ -51,6 +51,7 @@ export default function SearchBar({ onSelect }) {
     } else if (e.key === "Enter" && activeIndex >= 0) {
       if (onSelect) onSelect(filtered[activeIndex]);
       setOpen(false);
+      setQuery("");
     } else if (e.key === "Escape") {
       setOpen(false);
     }
@@ -59,6 +60,7 @@ export default function SearchBar({ onSelect }) {
   const handleSuggestionClick = (name) => {
     if (onSelect) onSelect(name);
     setOpen(false);
+    setQuery("");
   };
 
   // Close dropdown on outside click
@@ -82,6 +84,7 @@ export default function SearchBar({ onSelect }) {
       <div className="relative" ref={inputRef}>
         <Input
           type="text"
+          value={query}
           placeholder="Search Pokémon by name..."
           className="w-full pl-2 rounded-2xl"
           onChange={handleChange}

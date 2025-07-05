@@ -10,29 +10,23 @@ export default function Header() {
       <div className="text-xl font-bold">
         <Link
           to="/"
-          className="text-gray-900 dark:text-gray-300 text-sm md:text-3xl"
+          className="text-gray-900 dark:text-gray-300 text-2xl md:text-7xl font-neoza-serif"
         >
-          PokéDex
+          Pokétopia
         </Link>
       </div>
       <nav className="flex gap-4 items-center">
         <Link
-          to="/"
-          className="hover:underline text-gray-900 dark:text-gray-300 text-sm md:text-3xl"
-        >
-          Home
-        </Link>
-        <Link
           to="/pokemon"
-          className="hover:underline text-gray-900 dark:text-gray-300 text-sm md:text-3xl"
+          className="hover:underline font-bold text-gray-900 dark:text-gray-300 text-sm md:text-3xl font-seafont"
         >
           Pokémon
         </Link>
         <Link
-          to="/wordle"
-          className="hover:underline text-gray-900 dark:text-gray-300 text-sm md:text-3xl"
+          to="/pokeguess"
+          className="hover:underline font-bold text-gray-900 dark:text-gray-300 text-sm md:text-3xl font-seafont"
         >
-          Wordle
+          PokéGuess
         </Link>
         <DarkModeToggle />
       </nav>

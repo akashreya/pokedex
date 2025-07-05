@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap");
 @import "tailwindcss";
 
 /* Pokemon Fonts */
@@ -17,6 +18,22 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Neoza Serif";
+  src: url("/fonts/neoza.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Seafont";
+  src: url("/fonts/Seafont.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Debug styles for font testing */
 .font-pokemon-hollow {
   font-family: "Pokemon Hollow", "Arial", sans-serif !important;
@@ -28,6 +45,18 @@
 
 .font-poppins {
   font-family: "Poppins", "sans-serif", sans-serif !important;
+}
+
+.font-montserrat {
+  font-family: "Montserrat", "sans-serif", sans-serif !important;
+}
+
+.font-neoza-serif {
+  font-family: "Neoza Serif", serif !important;
+}
+
+.font-seafont {
+  font-family: "Seafont", serif !important;
 }
 
 @theme {
@@ -126,8 +155,12 @@
   }
 
   .hero-card {
-    @apply w-full p-4 bg-gradient-to-tl from-[#333333] via-[#e9d362] to-[#333333] 
-    dark:bg-gradient-to-br dark:from-[#000000] dark:via-[#485563] dark:to-[#000000] shadow-lg shadow-blue-900 dark:shadow-amber-400 rounded-4xl;
+    @apply w-full p-4 
+    bg-gradient-to-tl from-[#0c3483] via-[#a2b6df] to-[#6b8cce] 
+    md:from-[#13547a] md:via-[#80d0c7] md:to-[#13547a] 
+    dark:bg-gradient-to-br dark:from-[#000000] dark:via-[#485563] dark:to-[#000000] 
+    shadow-lg shadow-blue-900 dark:shadow-amber-400 
+    rounded-4xl;
   }
 
   .hero-content {
@@ -146,11 +179,15 @@
   }
 
   .regional-dex {
-    @apply flex flex-col mt-2 items-center justify-center w-full pt-2;
+    @apply flex flex-col my-6 items-center justify-center 
+    min-w-md md:min-w-xl mx-auto pt-2 
+    bg-gradient-to-t from-[#ED4264] via-[#FFEDBC] to-[#ED4264] 
+    dark:bg-gradient-to-tr dark:from-[#000000] dark:via-[#485563] dark:to-[#000000]
+    rounded-4xl shadow-lg shadow-blue-900 dark:shadow-amber-400;
   }
 
   .regional-dex h2 {
-    @apply text-3xl text-center text-rose-900 relative top-0 mb-0;
+    @apply text-5xl text-center text-rose-900 dark:text-[#FFEDBC] relative top-0 mb-0 mt-6;
   }
 
   .regional-dex-content {
@@ -360,7 +397,7 @@
   }
   .main-container {
     @apply flex-1 bg-gradient-to-tr from-[#ec77ab] to-[#7873f5]
-    dark:bg-gradient-to-br dark:from-[#152331] dark:to-[#000000];
+    dark:bg-gradient-to-br dark:to-[#434343] dark:from-[#000000];
   }
 
   .pokemon-detail-container {
@@ -658,6 +695,56 @@
   }
   .evo-arrow {
     @apply flex items-center h-[200px];
+  }
+
+  .pokedle-board {
+    @apply w-full max-w-7xl
+    bg-gradient-to-tl from-[#304352] via-[#304352] to-[#453a94]
+    dark:from-[#2774ae] dark:via-[#002E5D] dark:to-[#002E5D] rounded-2xl 
+    inset-shadow-sm inset-shadow-amber-500 p-4 md:p-8 
+    flex flex-row md:flex-col items-center
+    overflow-x-auto;
+  }
+
+  .pokedle-board-rows-panel {
+    @apply flex flex-row md:flex-col w-full mb-2;
+  }
+  .pokedle-board-header-panel {
+    @apply items-center grid md:grid-cols-10 gap-4 w-full mb-4 font-bold text-center 
+    text-gray-800 dark:text-gray-200 rounded-2xl py-2 sticky top-0;
+  }
+
+  .pokedle-table-rows {
+    @apply grid md:grid-cols-10 gap-4 mb-2 w-full;
+  }
+
+  .pokedle-table-header {
+    @apply h-16 w-20 md:h-24 md:w-28 flex items-center justify-center rounded-2xl shadow-sm
+      bg-gradient-to-br from-[#CC95C0] via-[#DBD4B4] to-[#7AA1D2]
+      dark:bg-gradient-to-br dark:from-[#434343] dark:via-[#152331] dark:to-[#000000]
+      text-xs md:text-xl m-1
+      border-2 border-black;
+  }
+
+  .pokedle-table-row {
+    @apply h-16 w-20 md:h-24 md:w-28 border-2 border-b-border border-black rounded-2xl
+     bg-lime-50 dark:bg-gray-900 flex items-center justify-center m-1;
+  }
+
+  .pokedle-table-filled-row {
+    @apply h-16 w-20 md:h-24 md:w-28 border-2 border-black rounded-2xl
+     bg-lime-50 dark:bg-gray-900 flex items-center justify-center m-1;
+  }
+
+  .cellbase {
+    @apply h-16 w-20 md:h-24 md:w-28 rounded-2xl flex items-center justify-center text-xs md:text-xl break-words;
+  }
+
+  .pokedle-image {
+    @apply h-12 w-12 object-contain mb-1 hidden md:block;
+  }
+  .pokedle-pokename {
+    @apply text-xs  md:text-xl text-wrap  md:text-balance font-bold text-gray-800 dark:text-gray-100 text-center capitalize;
   }
 }
 

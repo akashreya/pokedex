@@ -1,13 +1,12 @@
-
-import fetch from 'node-fetch';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fetch from "node-fetch";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const POKEAPI_BASE_URL = 'https://pokeapi.co/api/v2';
+const POKEAPI_BASE_URL = "https://pokeapi.co/api/v2";
 
 // Fetches data from a given PokéAPI URL
 async function fetchApi(url) {
@@ -48,12 +47,12 @@ function getEvolutionStage(chain, pokemonName) {
 }
 
 async function generateWordleData() {
-  console.log('Starting Pokémon data generation...');
-
   // 1. Fetch all Pokémon species (up to Gen 6 for MVP)
-  const pokemonListResponse = await fetchApi(`${POKEAPI_BASE_URL}/pokemon?limit=10000`);
+  const pokemonListResponse = await fetchApi(
+    `${POKEAPI_BASE_URL}/pokemon?limit=10000`
+  );
   if (!pokemonListResponse) {
-    console.error('Could not fetch Pokémon list. Aborting.');
+    console.error("Could not fetch Pokémon list. Aborting.");
     return;
   }
 
@@ -61,14 +60,13 @@ async function generateWordleData() {
   const wordleData = [];
   let count = 0;
 
-  console.log(`Found ${allPokemonEntries.length} Pokémon to process.`);
-
   // 2. Process each Pokémon
   for (const entry of allPokemonEntries) {
     const pokemonName = entry.name;
-    console.log(`Processing ${pokemonName} (${++count}/${allPokemonEntries.length})...`);
 
-    const pokemonData = await fetchApi(`${POKEAPI_BASE_URL}/pokemon/${pokemonName}`);
+    const pokemonData = await fetchApi(
+      `${POKEAPI_BASE_URL}/pokemon/${pokemonName}`
+    );
     if (!pokemonData) continue;
 
     const speciesData = await fetchApi(pokemonData.species.url);
@@ -77,7 +75,9 @@ async function generateWordleData() {
     // 3. Fetch and process evolution chain
     let evolutionStage = 1;
     if (speciesData.evolution_chain) {
-      const evolutionChainData = await fetchApi(speciesData.evolution_chain.url);
+      const evolutionChainData = await fetchApi(
+        speciesData.evolution_chain.url
+      );
       if (evolutionChainData) {
         evolutionStage = getEvolutionStage(evolutionChainData, pokemonName);
       }
@@ -87,10 +87,10 @@ async function generateWordleData() {
       id: pokemonData.id,
       name: pokemonName,
       types: pokemonData.types.map((t) => t.type.name),
-      generation: speciesData.generation.name.split('-')[1].toUpperCase(),
+      generation: speciesData.generation.name.split("-")[1].toUpperCase(),
       evolutionStage: evolutionStage,
       color: speciesData.color.name,
-      habitat: speciesData.habitat ? speciesData.habitat.name : 'unknown',
+      habitat: speciesData.habitat ? speciesData.habitat.name : "unknown",
       isLegendary: speciesData.is_legendary,
       isMythical: speciesData.is_mythical,
       height: pokemonData.height / 10, // m
@@ -99,7 +99,13 @@ async function generateWordleData() {
   }
 
   // 4. Write to file
-  const outputPath = path.join(__dirname, '..', 'src', 'constants', 'wordlePokemonData.json');
+  const outputPath = path.join(
+    __dirname,
+    "..",
+    "src",
+    "constants",
+    "wordlePokemonData.json"
+  );
   fs.writeFileSync(outputPath, JSON.stringify(wordleData, null, 2));
 
   console.log(`
