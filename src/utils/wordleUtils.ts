@@ -1,5 +1,4 @@
 import { PokemonWordleData, GuessResult } from '../types/WordleTypes';
-import { getPokemonList } from '../services/pokedexapi';
 import { POKEMON } from '../constants/Pokemon';
 import { getWordlePokemonData } from '../services/pokemonWordleService';
 
@@ -128,22 +127,6 @@ export function comparePokemon(guess: PokemonWordleData, target: PokemonWordleDa
   return { pokemon: guess, feedback };
 }
 
-let allPokemonNamesAndIds: { name: string; id: number }[] | null = null;
-
-export async function getPokemonIdByName(name: string): Promise<number | undefined> {
-  if (!allPokemonNamesAndIds) {
-    const response = await getPokemonList(10000); // Fetch all Pokémon
-    allPokemonNamesAndIds = response.data.results.map((p, index) => ({
-      name: p.name,
-      id: index + 1, // Assuming IDs are sequential from 1
-    }));
-  }
-  const entry = allPokemonNamesAndIds.find(
-    (p) => p.name.toLowerCase() === name.toLowerCase()
-  );
-  return entry?.id;
-}
-
 /**
  * Generates a spoiler-free shareable text representation of the game using emojis.
  * Similar to Wordle's share feature with colored squares representing feedback.
@@ -152,7 +135,6 @@ export function generateShareableText(
   guesses: GuessResult[],
   gameStatus: 'won' | 'lost' | 'playing',
   difficulty: 'easy' | 'medium' | 'hard',
-  targetPokemonName?: string,
   minimalPreview: boolean = false
 ): string {
   const difficultyText = difficulty.toUpperCase();
@@ -209,9 +191,9 @@ export function generateShareableText(
   if (!minimalPreview) {
     // Add legend
     result += '\n🟩=Correct 🟨=Partial 🟥=Wrong ⬆️=Higher ⬇️=Lower';
-    // Add pokemon name only if game is over
-    if (gameStatus !== 'playing' && targetPokemonName) {
-      result += `\n\nThe Pokémon was: ${targetPokemonName}`;
+    // Add play URL if game is over
+    if (gameStatus !== 'playing') {
+      result += `\n\nPlay here: https://pokemon.akashreya.space/pokeguess`;
     }
   }
 

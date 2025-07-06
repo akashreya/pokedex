@@ -27,15 +27,10 @@ const ShareModal: React.FC<ShareModalProps> = ({
   const [showToast, setShowToast] = React.useState(false);
 
   const generateShareText = () => {
-    const capitalizedName = gameResult.pokemonName
-      ? gameResult.pokemonName.charAt(0).toUpperCase() +
-        gameResult.pokemonName.slice(1)
-      : "";
     return generateShareableText(
       gameResult.guesses,
       gameResult.gameStatus,
-      gameResult.difficulty as "easy" | "medium" | "hard",
-      capitalizedName
+      gameResult.difficulty as "easy" | "medium" | "hard"
     );
   };
 

@@ -39,7 +39,7 @@ export default function RegionalPokedex() {
               bg-gradient-to-bl from-[#232526] to-[#414345]
               dark:bg-gradient-to-b dark:from-yellow-700 dark:to-yellow-400 
               text-yellow-400 dark:text-[#232526] shadow-md
-              hover:scale-105 hover:shadow-lg transition-all duration-200"
+              hover:scale-105 hover:shadow-lg transition-all duration-200 cursor-pointer"
           >
             Browse by Region
           </button>
