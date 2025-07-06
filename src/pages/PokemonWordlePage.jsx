@@ -8,7 +8,7 @@ import DifficultySelector from "@/components/wordle/DifficultySelector";
 import StatisticsModal from "@/components/wordle/StatisticsModal";
 import ShareModal from "@/components/wordle/ShareModal";
 import GameRulesModal from "@/components/wordle/GameRulesModal";
-import Loadingspinner from "@/components/layout/Loadingspinner";
+import LoadingSpinner from "@/components/layout/LoadingSpinner";
 import { Confetti } from "@/components/ui/confetti";
 import confetti from "canvas-confetti";
 import { useUserPreferences } from "@/context/UserPreferencesContext";
@@ -153,7 +153,7 @@ const PokemonWordlePage = () => {
   if (!gameState) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loadingspinner />
+        <LoadingSpinner />
       </div>
     );
   }
