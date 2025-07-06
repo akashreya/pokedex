@@ -141,7 +141,7 @@ export function generateShareableText(
   const statusEmoji = gameStatus === 'won' ? '🎉' : gameStatus === 'lost' ? '😞' : '🎮';
   const attemptsText = gameStatus === 'won' ? `${guesses.length}/6` : '6/6';
 
-  let result = `🎮 Pokémon Wordle (${difficultyText}) ${statusEmoji}\n`;
+  let result = `🎮 PokéGuess (${difficultyText}) ${gameStatus} ${statusEmoji}\n`;
   result += `${attemptsText} attempts\n\n`;
 
   // Generate emoji grid for each guess
