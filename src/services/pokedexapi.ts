@@ -76,6 +76,15 @@ export interface PokemonTypeInfo {
   // ...add more fields as needed
 }
 
+export interface PokemonSpecies {
+  evolution_chain: { url: string };
+  generation: { name: string };
+  color: { name: string };
+  habitat: { name: string };
+  is_legendary: boolean;
+  is_mythical: boolean;
+}
+
 export interface EvolutionChain {
   id: number;
   chain: any;

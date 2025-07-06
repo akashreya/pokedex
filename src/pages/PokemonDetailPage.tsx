@@ -18,6 +18,7 @@ import { useMultiplePokemon } from "../hooks/useMultiplePokemon";
 import SearchBar from "../components/home/SearchBar.jsx";
 import Carousel from "../components/ui/Carousel";
 import { usePokemonContext } from "@/context/PokemonContext";
+import ReactGA from "react-ga4";
 
 export default function PokemonDetailPage() {
   const { id } = useParams();
@@ -234,6 +235,16 @@ export default function PokemonDetailPage() {
     }
   };
 
+  // Handler for tab change with GA event
+  const handleTabChange = (tab: string) => {
+    setSelectedTab(tab);
+    ReactGA.event({
+      category: "Pokemon",
+      action: "Tab Change",
+      label: tab,
+    });
+  };
+
   return (
     <div
       className="relative"
@@ -270,7 +281,9 @@ export default function PokemonDetailPage() {
             />
           </div>
           <div className="pokemon-detail-searchbar">
-            <SearchBar />
+            <SearchBar
+              onSelect={(name: string) => navigate(`/pokemon/${name}`)}
+            />
           </div>
         </div>
 
@@ -373,7 +386,7 @@ export default function PokemonDetailPage() {
               <TabList
                 tabs={TAB_ITEMS.map((id) => ({ id }))}
                 selectedTab={selectedTab}
-                onTabChange={setSelectedTab}
+                onTabChange={handleTabChange}
               />
               <div className="pokemon-detail-tab-content">
                 {(() => {

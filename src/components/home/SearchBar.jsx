@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { POKEMON } from "@/constants/Pokemon";
 
@@ -18,13 +17,12 @@ const FLATTENED_POKEMON = POKEMON.flatMap((p) =>
     : [{ id: p.id, name: p.value }]
 );
 
-export default function SearchBar() {
+export default function SearchBar({ onSelect }) {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   const inputRef = useRef();
   const listRef = useRef();
-  const navigate = useNavigate();
 
   // Filter suggestions based on query
   const filtered = query
@@ -51,16 +49,18 @@ export default function SearchBar() {
     } else if (e.key === "ArrowUp") {
       setActiveIndex((i) => (i - 1 + filtered.length) % filtered.length);
     } else if (e.key === "Enter" && activeIndex >= 0) {
-      navigate(`/pokemon/${filtered[activeIndex]}`);
+      if (onSelect) onSelect(filtered[activeIndex]);
       setOpen(false);
+      setQuery("");
     } else if (e.key === "Escape") {
       setOpen(false);
     }
   };
 
   const handleSuggestionClick = (name) => {
-    navigate(`/pokemon/${name}`);
+    if (onSelect) onSelect(name);
     setOpen(false);
+    setQuery("");
   };
 
   // Close dropdown on outside click
@@ -84,6 +84,7 @@ export default function SearchBar() {
       <div className="relative" ref={inputRef}>
         <Input
           type="text"
+          value={query}
           placeholder="Search Pokémon by name..."
           className="w-full pl-2 rounded-2xl"
           onChange={handleChange}

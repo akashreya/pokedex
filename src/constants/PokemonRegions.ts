@@ -163,6 +163,5 @@ export const REGIONS_WITH_RANGE = [
   { name: "Kalos", range: [650, 721] },
   { name: "Alola", range: [722, 809] },
   { name: "Galar", range: [810, 905] },
-  { name: "Hisui", range: [906, 1010] },
-  { name: "Paldea", range: [1011, 1025] },
+  { name: "Paldea", range: [906, 1025] },
 ];

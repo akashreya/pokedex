@@ -21,6 +21,9 @@ module.exports = {
     },
     "font-pokemon-hollow",
     "font-pokemon-solid",
+    "via-green-500",
+    "via-yellow-500",
+    "via-red-500",
   ],
   theme: {
     container: {
@@ -36,6 +39,8 @@ module.exports = {
         quicksand: ["Quicksand", "sans-serif"],
         "pokemon-hollow": ["Pokemon Hollow", "display"],
         "pokemon-solid": ["Pokemon Solid", "display"],
+        "neoza-serif": ["Neoza Serif", "serif"],
+        seafont: ["Seafont", "serif"],
       },
       gridTemplateColumns: {
         15: "repeat(15, minmax(0, 1fr))",
