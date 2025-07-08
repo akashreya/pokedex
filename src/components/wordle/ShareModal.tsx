@@ -54,7 +54,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Pokémon Wordle Results",
+          title: "PokéGuess Results",
           text: generateShareText(),
           url: window.location.href,
         });

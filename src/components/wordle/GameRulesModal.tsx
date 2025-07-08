@@ -38,7 +38,7 @@ const GameRulesModal: React.FC<GameRulesModalProps> = ({ isOpen, onClose }) => {
                   className="text-[#272727] dark:text-[#EFD09E]"
                 />
                 <h2 className="text-2xl md:text-3xl font-bold text-[#272727] dark:text-[#EFD09E] font-montserrat">
-                  How to Play Pokémon Wordle
+                  How to Play PokéGuess
                 </h2>
               </div>
               <button

@@ -46,7 +46,7 @@ const StatisticsModal: React.FC<StatisticsModalProps> = ({
               id="stats-title"
               className="text-2xl font-extrabold text-[#272727] dark:text-[#EFD09E] font-montserrat uppercase"
             >
-              Your Wordle Statistics
+              Your PokéGuess Statistics
             </Dialog.Title>
             <button
               onClick={onClose}

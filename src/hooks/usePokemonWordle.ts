@@ -194,7 +194,7 @@ export function usePokemonWordle() {
     ReactGA.event({
       category: 'Game',
       action: 'Start',
-      label: 'Wordle Game Started'
+      label: 'PokéGuess Game Started'
     });
   };
 

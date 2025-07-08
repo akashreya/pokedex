@@ -168,9 +168,9 @@ const PokemonWordlePage = () => {
           manualstart
         />
         <div className="w-full max-w-2xl p-8 bg-white/80 dark:bg-gray-900/80 rounded-3xl shadow-lg flex flex-col items-center">
-          <h1 className="text-4xl font-bold mb-4">Pokédle</h1>
+          <h1 className="text-4xl font-bold mb-4">PokéGuess</h1>
           <p className="text-lg text-center mb-6">
-            Select a difficulty to start your daily Pokémon Wordle!
+            Select a difficulty to start your daily PokéGuess!
           </p>
           <DifficultySelector
             isOpen={showDifficultySelector}
@@ -198,7 +198,7 @@ const PokemonWordlePage = () => {
        dark:from-[#16222A] dark:via-[#3A6073] dark:to-[#16222A] rounded-4xl m-4"
       >
         <div className="w-full flex justify-between mx-auto my-8">
-          <h1 className="text-4xl font-bold text-center flex-1">Pokédle</h1>
+          <h1 className="text-4xl font-bold text-center flex-1">PokéGuess</h1>
           <motion.button
             onClick={handleShowRulesModal}
             className="p-2 bg-blue-100 dark:bg-gray-300 hover:bg-blue-200 rounded-full transition-colors"

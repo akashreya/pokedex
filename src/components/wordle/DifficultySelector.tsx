@@ -82,8 +82,8 @@ const DifficultySelector: React.FC<DifficultySelectorProps> = ({
             id="difficulty-desc"
             className="mb-6 text-center text-lg font-medium text-[#272727] dark:text-[#EFD09E] font-[Montserrat,sans-serif]"
           >
-            Choose your challenge level for today's Pokémon Wordle. You must
-            select a difficulty to play.
+            Choose your challenge level for today's PokéGuess. You must select a
+            difficulty to play.
           </Dialog.Description>
           <div
             className="grid gap-5 py-4"
