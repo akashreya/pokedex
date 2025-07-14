@@ -412,7 +412,7 @@ export const POKEMON = [
   { id: 410, value: "Shieldon" },
   { id: 411, value: "Bastiodon" },
   { id: 412, value: "Burmy" },
-  { id: 413, value: "Wormadam" },
+  { id: 413, value: ["Wormadam-plant", "Wormadam-sandy", "Wormadam-trash"]},
   { id: 414, value: "Mothim" },
   { id: 415, value: "Combee" },
   { id: 416, value: "Vespiquen" },
