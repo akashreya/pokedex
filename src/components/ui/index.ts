@@ -1,4 +1,7 @@
 export { default as TabList } from "./TabList"
 export { default as Breadcrumb } from "./Breadcrumb"
 export { default as InfoSection } from "./InfoSection"
-export { default as GenderRatioItem } from "./GenderRatioItem" 
+export { default as GenderRatioItem } from "./GenderRatioItem"
+export { default as AnimatedParticles } from "./AnimatedParticles"
+export { default as FloatingPokemonSilhouettes } from "./FloatingPokemonSilhouettes"
+export { default as PokemonTypeGradientOverlay } from "./PokemonTypeGradientOverlay" 
