@@ -11,6 +11,9 @@ import PokemonListLayout from "../components/pokemonlist/PokemonListLayout";
 import ReactGA from "react-ga4";
 import { fuzzySearchPokemon } from "../utils/fuzzySearch";
 import { useFavorites } from "../context/FavoritesContext";
+import { useKeyboardNavigation } from "../hooks/useKeyboardNavigation";
+import { useScrollDirection } from "../hooks/useScrollDirection";
+import { useNavigate } from "react-router-dom";
 
 const ALL_TYPES = [
   "normal",
@@ -91,6 +94,9 @@ export default function PokemonListing() {
 
   // Use favorites hook
   const { favorites } = useFavorites();
+
+  // Navigation
+  const navigate = useNavigate();
 
   // Ref for header
   const mainRef = useRef(null);
@@ -216,6 +222,14 @@ export default function PokemonListing() {
       list.sort((a, b) => a.name.localeCompare(b.name));
     if (sortBy === "name-desc")
       list.sort((a, b) => b.name.localeCompare(a.name));
+    if (sortBy === "height-asc") 
+      list.sort((a, b) => (a.height || 0) - (b.height || 0));
+    if (sortBy === "height-desc") 
+      list.sort((a, b) => (b.height || 0) - (a.height || 0));
+    if (sortBy === "weight-asc") 
+      list.sort((a, b) => (a.weight || 0) - (b.weight || 0));
+    if (sortBy === "weight-desc") 
+      list.sort((a, b) => (b.weight || 0) - (a.weight || 0));
     return list;
   }, [
     allPokemon,
@@ -245,6 +259,38 @@ export default function PokemonListing() {
   const totalPages = useMemo(() => {
     return Math.ceil(filtered.length / itemsPerPage);
   }, [filtered.length, itemsPerPage]);
+
+  // Keyboard navigation
+  const handleKeyboardNavigate = (pokemonId) => {
+    navigate(`/pokemon/${pokemonId}`);
+  };
+
+  const { focusedIndex, clearFocus, isFocused } = useKeyboardNavigation({
+    itemCount: paginatedPokemon?.length || 0,
+    gridColumns: viewMode === "grid" ? 4 : 1,
+    onNavigateToDetail: handleKeyboardNavigate,
+    viewMode,
+  });
+
+  // Smart scroll header visibility
+  const { shouldShowHeader, isAtTop } = useScrollDirection(50);
+
+  // Clear focus when filters change (after keyboard navigation hook is defined)
+  useEffect(() => {
+    if (clearFocus) {
+      clearFocus();
+    }
+  }, [
+    selectedTypes,
+    filterRarity,
+    filterEvolution,
+    sortBy,
+    viewMode,
+    debouncedSearch,
+    currentRegion,
+    showFavoritesOnly,
+    clearFocus,
+  ]);
 
   // Clear filters
   function clearFilters() {
@@ -305,7 +351,7 @@ export default function PokemonListing() {
 
   return (
     <section className="pokemonlisting-section">
-      {/* Header */}
+      {/* Original Header - Always Visible */}
       <header className="listing-header" ref={mainRef}>
         <img src="/Pokémon_logo.svg" alt="Pokemon Logo" />
         <div className="list-toggler">
@@ -318,11 +364,12 @@ export default function PokemonListing() {
         </div>
       </header>
 
+
       {/* Main content area including sidebar and list */}
       <main className="list-main">
         {/* Sidebar: always visible on desktop, overlay on mobile */}
         <aside
-          className={`md:block fixed md:relative top-15 left-0 h-3/4 w-72 z-50 md:z-auto ${
+          className={`md:block fixed md:relative ${!isAtTop && shouldShowHeader ? 'top-16' : 'top-0'} md:top-auto left-0 bottom-0 md:bottom-auto ${!isAtTop && shouldShowHeader ? 'h-[calc(100vh-4rem)]' : 'h-screen'} md:h-auto w-72 z-50 md:z-auto overflow-y-auto md:overflow-visible ${
             sidebarOpen ? "block" : "hidden"
           }`}
         >
@@ -357,7 +404,11 @@ export default function PokemonListing() {
 
         {/* List Area */}
         <div className="list-area">
-          <div className="list-hamburger-sort-panel">
+          <div 
+            className={`list-hamburger-sort-panel ${
+              !isAtTop ? (shouldShowHeader ? 'scroll-aware-sticky-panel--visible' : 'scroll-aware-sticky-panel--hidden') : ''
+            }`}
+          >
             {/* Mobile Filter Button */}
             <button
               onClick={() => setSidebarOpen(true)}
@@ -396,9 +447,17 @@ export default function PokemonListing() {
             ) : (
               <>
                 {viewMode === "grid" ? (
-                  <PokemonGridLayout paginatedPokemon={paginatedPokemon} />
+                  <PokemonGridLayout 
+                    paginatedPokemon={paginatedPokemon} 
+                    focusedIndex={focusedIndex}
+                    onKeyboardNavigate={handleKeyboardNavigate}
+                  />
                 ) : (
-                  <PokemonListLayout paginatedPokemon={paginatedPokemon} />
+                  <PokemonListLayout 
+                    paginatedPokemon={paginatedPokemon} 
+                    focusedIndex={focusedIndex}
+                    onKeyboardNavigate={handleKeyboardNavigate}
+                  />
                 )}
               </>
             )}

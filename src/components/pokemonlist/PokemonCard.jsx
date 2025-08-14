@@ -6,7 +6,12 @@ import ReactGA from "react-ga4";
 import { Heart } from "lucide-react";
 import { useFavorites } from "../../context/FavoritesContext";
 
-export default function PokemonCard({ pokemon, index = 0 }) {
+export default function PokemonCard({
+  pokemon,
+  index = 0,
+  isFocused = false,
+  onKeyboardNavigate,
+}) {
   const type1 = pokemon?.types?.[0]?.type?.name;
   const type2 = pokemon?.types?.[1]?.type?.name || type1;
   const { favorites, toggleFavorite } = useFavorites();
@@ -18,6 +23,13 @@ export default function PokemonCard({ pokemon, index = 0 }) {
       action: "Card Click",
       label: `${pokemon.name} (#${pokemon.id})`,
     });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && onKeyboardNavigate) {
+      e.preventDefault();
+      onKeyboardNavigate(pokemon.id);
+    }
   };
 
   const handleFavoriteClick = (e) => {
@@ -39,7 +51,11 @@ export default function PokemonCard({ pokemon, index = 0 }) {
       onClick={handleCardClick}
     >
       <motion.div
-        className={`pokemon-card ${getGradientClass(type1, type2)}`}
+        className={`pokemon-card ${getGradientClass(type1, type2)} ${
+          isFocused ? "pokemon-card-focused" : ""
+        }`}
+        tabIndex={isFocused ? 0 : -1}
+        onKeyDown={handleKeyDown}
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
@@ -49,17 +65,21 @@ export default function PokemonCard({ pokemon, index = 0 }) {
         }}
         whileHover={{ y: -5, transition: { duration: 0.2 } }}
       >
-        <button
-          className="absolute top-2 right-2 p-1 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors z-10"
-          onClick={handleFavoriteClick}
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-        >
-          <Heart
-            className={`w-5 h-5 transition-colors ${
-              isFavorite ? "fill-red-500 text-red-500" : "text-white/70 hover:text-white"
-            }`}
-          />
-        </button>
+        <div className="w-full flex justify-end mb-2">
+          <button
+            className="p-2 transition-all duration-200 cursor-pointer"
+            onClick={handleFavoriteClick}
+            aria-label={
+              isFavorite ? "Remove from favorites" : "Add to favorites"
+            }
+          >
+            <Heart
+              className={`w-5 h-5 transition-all duration-200 ${
+                isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
+              }`}
+            />
+          </button>
+        </div>
         <img src={pokemon.sprite} alt={pokemon.name} loading="lazy" />
         <div className="pokemon-card-number">
           #{pokemon.id.toString().padStart(3, "0")}

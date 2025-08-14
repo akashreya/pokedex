@@ -6,6 +6,10 @@ export default function SortControls({ sortBy, onSortChange }) {
     { value: "id-desc", label: "ID (High to Low)" },
     { value: "name-asc", label: "Name (A-Z)" },
     { value: "name-desc", label: "Name (Z-A)" },
+    { value: "height-asc", label: "Height (Shortest)" },
+    { value: "height-desc", label: "Height (Tallest)" },
+    { value: "weight-asc", label: "Weight (Lightest)" },
+    { value: "weight-desc", label: "Weight (Heaviest)" },
   ];
 
   const getSortIcon = (option) => {

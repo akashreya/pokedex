@@ -391,7 +391,7 @@
   }
 
   .pokemon-card-rarity {
-    @apply mt-2 text-xs text-gray-900;
+    @apply mt-2 text-xl text-gray-900;
   }
 
   .pagination {
@@ -417,7 +417,8 @@
   .filter-bar {
     @apply w-72 p-4 bg-gradient-to-b from-[#C6FFDD] via-[#FBD786] to-[#f7797d]
     dark:bg-gradient-to-t dark:from-[#0F2027] dark:via-[#203A43] dark:to-[#2C5364]
-    rounded-4xl h-full flex flex-col gap-4 mx-2 text-gray-800 dark:text-rose-100;
+    rounded-4xl min-h-0 max-h-[calc(100vh-2rem)] flex flex-col gap-4 mx-2 text-gray-800 dark:text-rose-100
+    overflow-hidden;
   }
 
   .filter-bar .search .search-input {
@@ -461,7 +462,16 @@
   }
 
   .clear-filter {
-    @apply mt-4 px-3 py-2 rounded-2xl bg-gray-200 dark:bg-gray-500 hover:bg-gray-300 cursor-pointer;
+    @apply mt-4 px-3 py-2 rounded-2xl bg-gray-200 dark:bg-gray-500 hover:bg-gray-300 cursor-pointer
+    flex-shrink-0;
+  }
+
+  .filter-content {
+    @apply flex-1 overflow-y-auto overflow-x-hidden;
+  }
+
+  .filter-footer {
+    @apply mt-auto pt-4 flex-shrink-0;
   }
 
   .app {
@@ -919,4 +929,63 @@
       transform: scale(1.1) rotate(180deg);
     }
   }
+}
+
+/* Keyboard navigation focus styles */
+.pokemon-card-focused {
+  @apply ring-4 ring-blue-500/75 dark:ring-blue-400/75
+  transform scale-105 shadow-2xl transition-all duration-200 ease-out;
+}
+
+.pokemon-card-list-focused {
+  @apply ring-4 ring-blue-500/75 dark:ring-blue-400/75
+  transform scale-102 shadow-lg transition-all duration-200 ease-out;
+}
+
+/* Smart scroll header styles */
+.scroll-aware-header {
+  @apply fixed top-0 left-0 right-0 z-50 
+  transition-transform duration-300 ease-in-out
+  bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
+  border-b border-gray-200 dark:border-gray-700
+  shadow-sm;
+}
+
+.scroll-aware-header--hidden {
+  @apply -translate-y-full;
+}
+
+.scroll-aware-header--visible {
+  @apply translate-y-0;
+}
+
+/* Ensure header content has proper padding */
+.scroll-aware-header .listing-header {
+  @apply px-4 py-3;
+}
+
+/* Add top padding to main content to account for fixed header */
+.main-content-with-fixed-header {
+  @apply pt-20; /* Adjust based on header height */
+}
+
+/* Adjust pokemonlisting section when header is fixed */
+.pokemonlisting-section {
+  @apply relative min-h-screen;
+}
+
+/* Smart sticky panel for hamburger + sort controls */
+.scroll-aware-sticky-panel--visible {
+  @apply fixed top-0 left-0 right-0 z-40
+  bg-gradient-to-r from-purple-400/90 via-pink-400/90 to-red-400/90
+  dark:bg-gradient-to-r dark:from-[#000000] dark:via-[#485563] dark:to-[#000000] 
+  backdrop-blur-md border-b border-white/20 dark:border-white/10
+  shadow-lg transform translate-y-0
+  transition-transform duration-300 ease-in-out;
+}
+
+.scroll-aware-sticky-panel--hidden {
+  @apply fixed top-0 left-0 right-0 z-40
+  transform -translate-y-full
+  transition-transform duration-300 ease-in-out;
 }

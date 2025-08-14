@@ -3,15 +3,38 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import TypeLogoBadge from "../ui/TypeLogoBadge";
 import ReactGA from "react-ga4";
+import { Heart } from "lucide-react";
+import { useFavorites } from "../../context/FavoritesContext";
 
-export default function PokemonCardList({ pokemon, index = 0 }) {
+export default function PokemonCardList({ pokemon, index = 0, isFocused = false, onKeyboardNavigate }) {
   const type1 = pokemon?.types?.[0]?.type?.name;
   const type2 = pokemon?.types?.[1]?.type?.name || type1;
+  const { favorites, toggleFavorite } = useFavorites();
+  const isFavorite = favorites.includes(pokemon.id);
 
   const handleCardClick = () => {
     ReactGA.event({
       category: "Pokemon",
       action: "Card Click",
+      label: `${pokemon.name} (#${pokemon.id})`,
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && onKeyboardNavigate) {
+      e.preventDefault();
+      onKeyboardNavigate(pokemon.id);
+    }
+  };
+
+  const handleFavoriteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const wasAlreadyFavorite = isFavorite;
+    toggleFavorite(pokemon.id);
+    ReactGA.event({
+      category: "Pokemon",
+      action: wasAlreadyFavorite ? "Remove Favorite" : "Add Favorite",
       label: `${pokemon.name} (#${pokemon.id})`,
     });
   };
@@ -23,7 +46,9 @@ export default function PokemonCardList({ pokemon, index = 0 }) {
       onClick={handleCardClick}
     >
       <motion.div
-        className={`pokemon-card-list  ${getGradientClass(type1, type2)}`}
+        className={`pokemon-card-list ${getGradientClass(type1, type2)} ${isFocused ? 'pokemon-card-list-focused' : ''}`}
+        tabIndex={isFocused ? 0 : -1}
+        onKeyDown={handleKeyDown}
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
