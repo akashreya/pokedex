@@ -796,16 +796,55 @@
     text-gray-800 dark:text-gray-200 rounded-2xl py-2 sticky top-0;
   }
 
+  .pokedle-board-header-panel > div {
+    @apply transition-all duration-200 ease-out cursor-help rounded-lg px-2 py-1 relative;
+  }
+
+  .pokedle-board-header-panel > div:hover {
+    @apply bg-white/20 dark:bg-gray-700/30 transform scale-105;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .pokedle-board-header-panel > div::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: rgba(59, 130, 246, 0.8);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+  }
+
+  .pokedle-board-header-panel > div:hover::after {
+    content: "?";
+    opacity: 1;
+  }
+
   .pokedle-table-rows {
     @apply grid md:grid-cols-10 gap-4 mb-2 w-full;
   }
 
   .pokedle-table-header {
     @apply h-16 w-20 md:h-24 md:w-28 flex items-center justify-center rounded-2xl shadow-sm
-      bg-gradient-to-br from-[#CC95C0] via-[#DBD4B4] to-[#7AA1D2]
+      bg-gradient-to-br from-[#CC95C0] via-[#DBD4B4] to-[#7AA1D2] 
       dark:bg-gradient-to-br dark:from-[#434343] dark:via-[#152331] dark:to-[#000000]
       text-xs md:text-xl m-1
-      border-2 border-black;
+      border border-black
+      transition-all duration-300 ease-out;
+  }
+
+  .pokedle-table-header:hover {
+    @apply transform scale-102 shadow-md;
+    border-color: rgba(0, 0, 0, 0.8);
   }
 
   .pokedle-table-row {
@@ -815,7 +854,12 @@
 
   .pokedle-table-filled-row {
     @apply h-16 w-20 md:h-24 md:w-28 border-2 border-black rounded-2xl
-     bg-lime-50 dark:bg-gray-900 flex items-center justify-center m-1;
+     bg-lime-50 dark:bg-gray-900 flex items-center justify-center m-1
+     transition-all duration-300 ease-out cursor-pointer relative;
+  }
+
+  .pokedle-table-filled-row:hover {
+    @apply transform scale-105 shadow-lg;
   }
 
   .cellbase {
@@ -827,6 +871,287 @@
   }
   .pokedle-pokename {
     @apply text-xs  md:text-xl text-wrap  md:text-balance font-bold text-gray-800 dark:text-gray-100 text-center capitalize;
+  }
+
+  /* Pokemon Wordle Animation Keyframes */
+  @keyframes gentlePulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+  }
+
+  @keyframes subtleShake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-2px);
+    }
+    75% {
+      transform: translateX(2px);
+    }
+  }
+
+  @keyframes arrowBounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -100px 0;
+    }
+    100% {
+      background-position: 100px 0;
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes staggerIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* New guess row animations */
+  .guess-row-enter {
+    animation: slideInFromBottom 0.6s ease-out forwards;
+  }
+
+  .guess-cell-stagger {
+    opacity: 0;
+    animation: staggerIn 0.4s ease-out forwards;
+  }
+
+  .guess-cell-stagger:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .guess-cell-stagger:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .guess-cell-stagger:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .guess-cell-stagger:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .guess-cell-stagger:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .guess-cell-stagger:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  .guess-cell-stagger:nth-child(7) {
+    animation-delay: 0.7s;
+  }
+  .guess-cell-stagger:nth-child(8) {
+    animation-delay: 0.8s;
+  }
+  .guess-cell-stagger:nth-child(9) {
+    animation-delay: 0.9s;
+  }
+  .guess-cell-stagger:nth-child(10) {
+    animation-delay: 1s;
+  }
+
+  /* Colorblind-friendly corner indicators - subtle and clean */
+  .cell-correct::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  .cell-incorrect::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+
+  .cell-partial::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    z-index: 10;
+  }
+
+  .cell-higher::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    right: 2px;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 6px solid rgba(255, 255, 255, 0.9);
+    z-index: 10;
+  }
+
+  .cell-lower::after {
+    content: "";
+    position: absolute;
+    bottom: 1px;
+    right: 2px;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid rgba(255, 255, 255, 0.9);
+    z-index: 10;
+  }
+
+  /* Status-specific hover effects */
+  .cell-correct:hover {
+    @apply shadow-green-500/50;
+    animation: gentlePulse 1.5s ease-in-out infinite;
+  }
+
+  .cell-incorrect:hover {
+    @apply shadow-red-500/50;
+    animation: subtleShake 0.5s ease-in-out;
+  }
+
+  .cell-partial:hover {
+    @apply shadow-yellow-500/50;
+    background: linear-gradient(
+      90deg,
+      currentColor 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      currentColor 100%
+    );
+    background-size: 200px 100%;
+    animation: shimmer 2s infinite linear;
+  }
+
+  .cell-higher:hover .arrow-up,
+  .cell-lower:hover .arrow-down {
+    animation: arrowBounce 0.8s ease-in-out infinite;
+  }
+
+  .cell-higher:hover {
+    @apply shadow-blue-500/50;
+  }
+
+  .cell-lower:hover {
+    @apply shadow-purple-500/50;
+  }
+
+  /* Pokemon image and name hover effects */
+  .pokedle-image {
+    @apply h-12 w-12 object-contain mb-1 hidden md:block transition-all duration-300 ease-out;
+  }
+
+  .pokedle-image:hover {
+    @apply transform scale-110;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transform: scale(1.1) rotate(2deg);
+  }
+
+  .pokedle-pokename {
+    @apply text-xs  md:text-xl text-wrap  md:text-balance font-bold text-gray-800 dark:text-gray-100 text-center capitalize
+    transition-all duration-300 ease-out;
+  }
+
+  .pokedle-pokename:hover {
+    @apply transform scale-105;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.05em;
+  }
+
+  /* Enhanced tooltips for AttributeCell */
+  .pokedle-table-filled-row {
+    position: relative;
+  }
+
+  .pokedle-table-filled-row:hover::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    animation: tooltipFadeIn 0.3s ease-out 0.8s forwards;
+    pointer-events: none;
+  }
+
+  @keyframes tooltipFadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  /* Accessibility - Respect prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .pokedle-table-filled-row,
+    .pokedle-image,
+    .pokedle-pokename {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .pokedle-table-filled-row:hover {
+      transform: none !important;
+      animation: none !important;
+    }
+
+    .pokedle-table-filled-row:hover::before {
+      animation: none !important;
+      opacity: 1;
+    }
   }
 }
 

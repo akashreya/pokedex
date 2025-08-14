@@ -36,6 +36,10 @@ const PokemonWordlePage = () => {
   const searchBarRef = useRef(null);
   const confettiRef = useRef(null);
   const resultSectionRef = useRef(null);
+  const newGameButtonRef = useRef(null);
+  const shareButtonRef = useRef(null);
+  const statsButtonRef = useRef(null);
+  const rulesButtonRef = useRef(null);
   const { theme } = useUserPreferences();
 
   const handleShowRulesModal = useCallback(() => setShowRulesModal(true), []);
@@ -149,6 +153,62 @@ const PokemonWordlePage = () => {
     }
   }, [gameState]);
 
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback((e) => {
+    // Don't interfere with input fields or modals
+    if (e.target.tagName === 'INPUT' || showRulesModal || showStatisticsModal || showShareModal || showDifficultySelector) {
+      return;
+    }
+
+    switch (e.key.toLowerCase()) {
+      case 'f1':
+      case '?':
+      case 'h':
+        e.preventDefault();
+        handleShowRulesModal();
+        break;
+      case 'n':
+        e.preventDefault();
+        if (gameState?.gameStatus !== 'playing' && newGameButtonRef.current) {
+          newGame();
+        }
+        break;
+      case 's':
+        e.preventDefault();
+        if (gameState?.gameStatus !== 'playing' && shareButtonRef.current) {
+          handleShowShareModal();
+        }
+        break;
+      case 't':
+        e.preventDefault();
+        if (gameState?.gameStatus !== 'playing' && statsButtonRef.current) {
+          handleShowStatisticsModal();
+        }
+        break;
+      case '/':
+      case 'f':
+        e.preventDefault();
+        if (searchBarRef.current) {
+          const input = searchBarRef.current.querySelector('input');
+          if (input) input.focus();
+        }
+        break;
+      case 'escape':
+        // Close any open modals
+        if (showRulesModal) setShowRulesModal(false);
+        if (showStatisticsModal) setShowStatisticsModal(false);
+        if (showShareModal) setShowShareModal(false);
+        if (showDifficultySelector) setShowDifficultySelector(false);
+        break;
+    }
+  }, [gameState, showRulesModal, showStatisticsModal, showShareModal, showDifficultySelector, handleShowRulesModal, handleShowShareModal, handleShowStatisticsModal, newGame]);
+
+  // Attach keyboard listener
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
   // Guard: If gameState is null or undefined, show a loading spinner
   if (!gameState) {
     return (
@@ -200,11 +260,12 @@ const PokemonWordlePage = () => {
         <div className="w-full flex justify-between mx-auto my-8">
           <h1 className="text-4xl font-bold text-center flex-1">PokéGuess</h1>
           <motion.button
+            ref={rulesButtonRef}
             onClick={handleShowRulesModal}
             className="p-2 bg-blue-100 dark:bg-gray-300 hover:bg-blue-200 rounded-full transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            title="How to Play"
+            title="How to Play (Press ? or H)"
           >
             <HelpCircle size={24} className="text-emerald-600" />
           </motion.button>
@@ -216,6 +277,7 @@ const PokemonWordlePage = () => {
             disabled={
               gameState.difficulty == null || gameState.gameStatus !== "playing"
             }
+            placeholder="Search Pokémon by name... (Press / or F to focus)"
           />
         </div>
 
@@ -308,27 +370,33 @@ const PokemonWordlePage = () => {
               </p>
               <div className="flex flex-col md:flex-row gap-4 w-full max-w-xs md:max-w-2xl items-center justify-center">
                 <motion.button
+                  ref={newGameButtonRef}
                   onClick={newGame}
                   className="w-full md:flex-1 md:min-w-[140px] px-4 py-3 rounded-2xl bg-[#EFD09E] text-[#272727] border-2 border-[#D4AA7D] shadow-lg dark:bg-[#272727] dark:text-[#EFD09E] dark:border-[#D4AA7D] font-montserrat font-bold text-lg md:text-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
+                  title="Play Again (Press N)"
                 >
                   Play Again
                 </motion.button>
                 <motion.button
+                  ref={shareButtonRef}
                   onClick={handleShowShareModal}
                   className="w-full md:flex-1 md:min-w-[140px] px-4 py-3 rounded-2xl bg-[#EFD09E] text-[#272727] border-2 border-[#D4AA7D] shadow-lg dark:bg-[#272727] dark:text-[#EFD09E] dark:border-[#D4AA7D] font-montserrat font-bold text-lg md:text-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
+                  title="Share Result (Press S)"
                 >
                   <Share2 size={20} className="inline-block align-middle" />
                   <span>Share</span>
                 </motion.button>
                 <motion.button
+                  ref={statsButtonRef}
                   onClick={handleShowStatisticsModal}
                   className="w-full md:flex-1 md:min-w-[140px] px-4 py-3 rounded-2xl bg-[#EFD09E] text-[#272727] border-2 border-[#D4AA7D] shadow-lg dark:bg-[#272727] dark:text-[#EFD09E] dark:border-[#D4AA7D] font-montserrat font-bold text-lg md:text-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
+                  title="View Statistics (Press T)"
                 >
                   View Statistics
                 </motion.button>

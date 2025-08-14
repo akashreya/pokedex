@@ -17,7 +17,7 @@ const FLATTENED_POKEMON = POKEMON.flatMap((p) =>
     : [{ id: p.id, name: p.value }]
 );
 
-export default function SearchBar({ onSelect }) {
+export default function SearchBar({ onSelect, placeholder = "Search Pokémon by name..." }) {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [open, setOpen] = useState(false);
@@ -85,7 +85,7 @@ export default function SearchBar({ onSelect }) {
         <Input
           type="text"
           value={query}
-          placeholder="Search Pokémon by name..."
+          placeholder={placeholder}
           className="w-full pl-2 rounded-2xl"
           onChange={handleChange}
           onKeyDown={handleKeyDown}

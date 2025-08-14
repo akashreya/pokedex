@@ -50,6 +50,46 @@ const getInitialState = async (): Promise<GameState> => {
         // No difficulty set, don't fetch
         return { ...parsedState, targetPokemon: null, difficulty: null };
       }
+    } else {
+      // New day - preserve statistics but reset game state
+      // Check if streak should be broken (missed a day)
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      
+      const updatedStats = { ...parsedState.statistics };
+      
+      // If the last game was not yesterday and the game was not completed (still playing), break streak
+      if (parsedState.currentDate !== yesterdayStr && parsedState.gameStatus === 'playing') {
+        updatedStats.currentStreak = 0;
+      }
+      // If the last game was yesterday but was lost, streak is already 0
+      // If the last game was yesterday and was won, streak continues
+      
+      if (parsedState.difficulty) {
+        const targetPokemon = await getDailyPokemon(parsedState.difficulty);
+        if (!targetPokemon) throw new Error("Failed to fetch daily Pokémon data.");
+        return {
+          currentDate: today,
+          difficulty: parsedState.difficulty,
+          targetPokemon,
+          guesses: [],
+          gameStatus: 'playing',
+          statistics: updatedStats,
+          version: GAME_STATE_VERSION,
+        };
+      } else {
+        // No difficulty set, preserve stats but don't fetch Pokemon
+        return {
+          currentDate: today,
+          difficulty: null,
+          targetPokemon: null,
+          guesses: [],
+          gameStatus: 'playing',
+          statistics: updatedStats,
+          version: GAME_STATE_VERSION,
+        };
+      }
     }
   }
 

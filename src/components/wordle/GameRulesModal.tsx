@@ -94,41 +94,64 @@ const GameRulesModal: React.FC<GameRulesModalProps> = ({ isOpen, onClose }) => {
               <h3 className="text-xl md:text-2xl font-semibold text-[#272727] dark:text-[#EFD09E] mb-3 font-montserrat">
                 🌈 Feedback System
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-montserrat text-base md:text-lg">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-montserrat text-base md:text-lg mb-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-green-500 rounded-2xl border-2 border-[#D4AA7D]"></div>
+                  <div className="w-8 h-8 bg-green-500 rounded-2xl border-2 border-[#D4AA7D] flex items-center justify-center text-white font-bold relative">
+                    <span>✓</span>
+                    <div className="absolute top-0.5 right-0.5 w-2 h-2 bg-white rounded-full"></div>
+                  </div>
                   <span className="text-sm text-[#272727] dark:text-[#EFD09E]">
                     Correct
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-yellow-400 rounded-2xl border-2 border-[#D4AA7D]"></div>
+                  <div className="w-8 h-8 bg-yellow-400 rounded-2xl border-2 border-[#D4AA7D] flex items-center justify-center text-gray-900 font-bold relative">
+                    <span>~</span>
+                    <div className="absolute top-0.5 right-0.5 w-2 h-2 bg-white" style={{clipPath: 'polygon(0% 0%, 100% 0%, 50% 100%)'}}></div>
+                  </div>
                   <span className="text-sm text-[#272727] dark:text-[#EFD09E]">
                     Partial (Types only)
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-red-500 rounded-2xl border-2 border-[#D4AA7D]"></div>
+                  <div className="w-8 h-8 bg-red-500 rounded-2xl border-2 border-[#D4AA7D] flex items-center justify-center text-white font-bold relative">
+                    <span>✗</span>
+                    <div className="absolute top-0.5 right-0.5 w-2 h-2 bg-white transform rotate-45"></div>
+                  </div>
                   <span className="text-sm text-[#272727] dark:text-[#EFD09E]">
                     Incorrect
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#272727] dark:text-[#EFD09E] font-bold">
-                    ↑
-                  </span>
+                  <div className="w-8 h-8 bg-blue-500 rounded-2xl border-2 border-[#D4AA7D] flex items-center justify-center text-white font-bold relative">
+                    <span>↑</span>
+                    <div className="absolute top-0 right-1 w-0 h-0 border-l-2 border-r-2 border-b-3 border-l-transparent border-r-transparent border-b-white"></div>
+                  </div>
                   <span className="text-sm text-[#272727] dark:text-[#EFD09E]">
                     Target is higher
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#272727] dark:text-[#EFD09E] font-bold">
-                    ↓
-                  </span>
+                  <div className="w-8 h-8 bg-purple-500 rounded-2xl border-2 border-[#D4AA7D] flex items-center justify-center text-white font-bold relative">
+                    <span>↓</span>
+                    <div className="absolute bottom-0 right-1 w-0 h-0 border-l-2 border-r-2 border-t-3 border-l-transparent border-r-transparent border-t-white"></div>
+                  </div>
                   <span className="text-sm text-[#272727] dark:text-[#EFD09E]">
                     Target is lower
                   </span>
                 </div>
+              </div>
+              
+              {/* Colorblind Accessibility Note */}
+              <div className="p-4 bg-blue-50 dark:bg-gray-800 border-2 border-blue-200 dark:border-gray-600 rounded-2xl">
+                <h4 className="font-semibold text-[#272727] dark:text-[#EFD09E] mb-2 flex items-center gap-2">
+                  ♿ Accessibility Features
+                </h4>
+                <p className="text-sm text-[#272727] dark:text-[#EFD09E] leading-relaxed">
+                  Each cell includes <strong>clear symbols</strong> (✓ ~ ✗ ↑ ↓) and <strong>subtle corner indicators</strong> 
+                  (circle, triangle, diamond, up/down arrows) to help distinguish between different states, making the game fully accessible for colorblind users.
+                  Hover over any cell for detailed explanations!
+                </p>
               </div>
             </section>
 
@@ -248,6 +271,39 @@ const GameRulesModal: React.FC<GameRulesModalProps> = ({ isOpen, onClose }) => {
                   • Remember that legendary/mythical status is binary (yes/no)
                 </li>
               </ul>
+            </section>
+
+            {/* Keyboard Shortcuts */}
+            <section className="mb-6">
+              <h3 className="text-xl md:text-2xl font-semibold text-[#272727] dark:text-[#EFD09E] mb-3 font-montserrat">
+                ⌨️ Keyboard Shortcuts
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-montserrat text-base">
+                <div className="p-3 bg-[#D4AA7D] border-2 border-[#D4AA7D] rounded-2xl">
+                  <strong className="text-[#272727]">? or H:</strong>
+                  <span className="text-[#272727] ml-2">Show this help</span>
+                </div>
+                <div className="p-3 bg-[#D4AA7D] border-2 border-[#D4AA7D] rounded-2xl">
+                  <strong className="text-[#272727]">/ or F:</strong>
+                  <span className="text-[#272727] ml-2">Focus search bar</span>
+                </div>
+                <div className="p-3 bg-[#D4AA7D] border-2 border-[#D4AA7D] rounded-2xl">
+                  <strong className="text-[#272727]">N:</strong>
+                  <span className="text-[#272727] ml-2">New game (when finished)</span>
+                </div>
+                <div className="p-3 bg-[#D4AA7D] border-2 border-[#D4AA7D] rounded-2xl">
+                  <strong className="text-[#272727]">S:</strong>
+                  <span className="text-[#272727] ml-2">Share results (when finished)</span>
+                </div>
+                <div className="p-3 bg-[#D4AA7D] border-2 border-[#D4AA7D] rounded-2xl">
+                  <strong className="text-[#272727]">T:</strong>
+                  <span className="text-[#272727] ml-2">View statistics (when finished)</span>
+                </div>
+                <div className="p-3 bg-[#D4AA7D] border-2 border-[#D4AA7D] rounded-2xl">
+                  <strong className="text-[#272727]">Escape:</strong>
+                  <span className="text-[#272727] ml-2">Close modals</span>
+                </div>
+              </div>
             </section>
 
             {/* Close Button */}
