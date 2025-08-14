@@ -1,10 +1,6 @@
 import * as React from "react";
-import {
-  getPokemonList,
-  getPokemonByIdOrName,
-  Pokemon,
-} from "../services/pokedexapi";
-import { fetchWithCache } from "../services/cache";
+import { Pokedex } from "pokeapi-js-wrapper";
+import { Pokemon } from "../services/pokedexapi";
 
 interface PokemonDetail extends Pokemon {
   // Extend with more detail fields as needed
@@ -37,8 +33,13 @@ const regionRanges: Record<string, { offset: number; limit: number }> = {
   Paldea: { offset: 905, limit: 120 },
 };
 const regions = ["All Regions", ...Object.keys(regionRanges)];
-const ALL_REGIONS_LIMIT = 200;
-const ALL_REGIONS_BATCH_SIZE = 20;
+
+// Initialize PokeAPI wrapper with caching enabled
+const P = new Pokedex({
+  cache: true,
+  timeout: 5000,
+  cacheImages: true,
+});
 
 const PokemonContext = React.createContext<PokemonContextType | undefined>(
   undefined
@@ -53,97 +54,97 @@ export const PokemonProvider: React.FC<React.PropsWithChildren> = ({
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   const [currentRegion, setCurrentRegion] = React.useState<string>("Kanto");
-  // Cache for region lists
-  const regionCache = React.useRef<Record<string, Pokemon[]>>({});
-
-  // All Regions state
+  
+  // All Regions progressive loading
   const [allRegionsHasMore, setAllRegionsHasMore] = React.useState(true);
-  const allRegionsCache = React.useRef<{
-    summaryOffsets: Set<number>;
-    details: Record<string, Pokemon>;
-  }>({ summaryOffsets: new Set(), details: {} });
+  const loadedPokemonIds = React.useRef<Set<number>>(new Set());
 
-  // Helper to fetch details in batches
-  async function fetchDetailsBatch(names: string[]): Promise<Pokemon[]> {
-    const results: Pokemon[] = [];
-    for (let i = 0; i < names.length; i += ALL_REGIONS_BATCH_SIZE) {
-      const batch = names.slice(i, i + ALL_REGIONS_BATCH_SIZE);
-      const batchResults = await Promise.all(
-        batch.map(async (name) => {
-          if (allRegionsCache.current.details[name]) {
-            return allRegionsCache.current.details[name];
-          }
-          try {
-            const url = `https://pokeapi.co/api/v2/pokemon/${name}`;
-            const pokemonData = await fetchWithCache(url);
-            // Sprite logic: dream_world > home > front_default
-            const sprite =
-              pokemonData.sprites?.other?.dream_world?.front_default ||
-              pokemonData.sprites?.other?.home?.front_default ||
-              pokemonData.sprites?.front_default ||
-              "";
-            // Rarity
-            let rarity = "regular";
-            try {
-              const speciesRes = await fetchWithCache(pokemonData.species.url);
-              if (speciesRes.is_legendary) rarity = "legendary";
-              if (speciesRes.is_mythical) rarity = "mythical";
-            } catch {}
-            const pokemon = {
-              ...pokemonData,
-              sprite,
-              rarity,
-            };
-            allRegionsCache.current.details[name] = pokemon;
-            return pokemon;
-          } catch {
-            return null;
-          }
-        })
-      );
-      results.push(...(batchResults.filter(Boolean) as Pokemon[]));
+  // Helper to transform wrapper data to our Pokemon interface
+  const transformPokemonData = async (pokemonData: any): Promise<Pokemon> => {
+    // Sprite logic: dream_world > home > front_default
+    const sprite =
+      pokemonData.sprites?.other?.dream_world?.front_default ||
+      pokemonData.sprites?.other?.home?.front_default ||
+      pokemonData.sprites?.front_default ||
+      "";
+    
+    // Rarity from species data
+    let rarity = "regular";
+    try {
+      const species = await P.getPokemonSpeciesByName(pokemonData.name);
+      if (species.is_legendary) rarity = "legendary";
+      if (species.is_mythical) rarity = "mythical";
+    } catch (error) {
+      console.warn(`Failed to fetch species for ${pokemonData.name}:`, error);
     }
-    return results;
-  }
+    
+    return {
+      ...pokemonData,
+      sprite,
+      rarity,
+    };
+  };
 
-  // Fetch for All Regions (paginated)
+  // Fetch for All Regions (progressive loading)
   const fetchAllRegionsPage = async (offset: number, isBackground = false) => {
     if (!isBackground) setLoading(true);
     setError(null);
     try {
-      if (allRegionsCache.current.summaryOffsets.has(offset)) {
+      const limit = 50; // Batch size for progressive loading
+      const maxPokemonId = 1025;
+      
+      // Check if we've already loaded beyond this offset
+      const startId = offset + 1;
+      const endId = Math.min(startId + limit - 1, maxPokemonId);
+      
+      if (startId > maxPokemonId) {
+        setAllRegionsHasMore(false);
         if (!isBackground) setLoading(false);
         return;
       }
-      const url = `https://pokeapi.co/api/v2/pokemon?limit=${ALL_REGIONS_LIMIT}&offset=${offset}`;
-      const summary = await fetchWithCache(url);
-      const names = summary.results.map((p: any) => p.name);
-      const details = await fetchDetailsBatch(names);
-      // Filter out Pokémon with id > 1025
-      const filteredDetails = details.filter((p) => p && p.id && p.id <= 1025);
-      // If any Pokémon in this batch has id === 1025, stop further fetching
-      if (filteredDetails.some((p) => p.id === 1025)) {
-        setAllRegionsHasMore(false);
+      
+      // Fetch Pokemon in this range
+      const pokemonPromises = [];
+      for (let id = startId; id <= endId; id++) {
+        if (!loadedPokemonIds.current.has(id)) {
+          pokemonPromises.push(
+            P.getPokemonByName(id.toString()).then(async (data) => {
+              const pokemon = await transformPokemonData(data);
+              loadedPokemonIds.current.add(id);
+              return pokemon;
+            }).catch(error => {
+              console.warn(`Failed to fetch Pokemon ${id}:`, error);
+              return null;
+            })
+          );
+        }
       }
-      allRegionsCache.current.summaryOffsets.add(offset);
-      setPokemonList((prev) => {
-        const all = [...prev, ...filteredDetails];
-        // Deduplicate by id
-        const unique = Array.from(new Map(all.map((p) => [p.id, p])).values());
-        // Log the correct count after setting
-        console.debug(
-          "[PokemonContext] All Regions batch loaded:",
-          unique.length,
-          unique.slice(0, 5).map((p) => p?.name)
-        );
-        return unique;
-      });
-      // If no more summary.next, also stop
-      if (!summary.next) {
+      
+      if (pokemonPromises.length > 0) {
+        const newPokemon = (await Promise.all(pokemonPromises)).filter(Boolean) as Pokemon[];
+        
+        setPokemonList((prev) => {
+          const combined = [...prev, ...newPokemon];
+          // Sort by ID and deduplicate
+          const unique = Array.from(
+            new Map(combined.map((p) => [p.id, p])).values()
+          ).sort((a, b) => a.id - b.id);
+          
+          console.debug(
+            "[PokemonContext] All Regions batch loaded:",
+            unique.length,
+            "total Pokemon"
+          );
+          return unique;
+        });
+      }
+      
+      // Check if we've reached the end
+      if (endId >= maxPokemonId) {
         setAllRegionsHasMore(false);
       }
     } catch (err: any) {
-      console.error(err.message);
+      console.error("Error fetching All Regions:", err);
       setError(err.message || "Failed to fetch all Pokémon");
     } finally {
       if (!isBackground) setLoading(false);
@@ -159,8 +160,7 @@ export const PokemonProvider: React.FC<React.PropsWithChildren> = ({
   // Helper to clear all AllRegions state
   const resetAllRegionsState = () => {
     setAllRegionsHasMore(true);
-    allRegionsCache.current.summaryOffsets.clear();
-    allRegionsCache.current.details = {};
+    loadedPokemonIds.current.clear();
   };
 
   // Main fetch function
@@ -169,86 +169,46 @@ export const PokemonProvider: React.FC<React.PropsWithChildren> = ({
       setLoading(true);
       setError(null);
       setPokemonList([]); // Always clear list on new fetch
-      // Debug: log region switch
       console.debug("[PokemonContext] Fetching region:", region);
+      
       if (region === "All Regions") {
         // Reset state for new all-regions fetch
         resetAllRegionsState();
-        // Fetch first page
-        await fetchAllRegionsPage(0, false); // false = not background
-        setLoading(false);
+        // Fetch first batch
+        await fetchAllRegionsPage(0, false);
         return;
       } else {
         // Leaving All Regions: reset its state
         resetAllRegionsState();
       }
+      
       try {
-        // Use cache if available
-        if (regionCache.current[region]) {
-          // Deduplicate just in case
-          const unique = Array.from(
-            new Map(regionCache.current[region].map((p) => [p.id, p])).values()
-          );
-          setPokemonList(unique);
-          setLoading(false);
-          // Debug: log after fetch
-          console.debug(
-            `[PokemonContext] ${region} (from cache):`,
-            unique.length,
-            unique.slice(0, 5).map((p) => p?.name)
-          );
-          return;
-        }
         const { offset, limit } = regionRanges[region] || regionRanges["Kanto"];
-        const res = await getPokemonList(limit, offset);
-        const results = res.data.results;
-        const details = await Promise.all(
-          results.map(async (p) => {
-            try {
-              const detailRes = await getPokemonByIdOrName(p.name);
-              const pokemonData = detailRes.data;
-              // Sprite logic: dream_world > home > front_default
-              const sprite =
-                pokemonData.sprites.other.dream_world.front_default ||
-                pokemonData.sprites.other.home.front_default ||
-                pokemonData.sprites.front_default ||
-                "";
-              // Rarity
-              let rarity = "regular";
-              try {
-                const speciesRes = await fetch(pokemonData.species.url);
-                const species = await speciesRes.json();
-                if (species.is_legendary) rarity = "legendary";
-                if (species.is_mythical) rarity = "mythical";
-              } catch (err) {
-                console.error("Error fetching species:", err);
-              }
-              const pokemon = {
-                ...pokemonData,
-                sprite,
-                rarity,
-              };
-              return pokemon;
-            } catch (err) {
-              console.error("Failed to fetch details for:", p.name, err);
+        
+        // Fetch Pokemon list for the region using wrapper
+        const pokemonPromises = [];
+        for (let id = offset + 1; id <= offset + limit; id++) {
+          pokemonPromises.push(
+            P.getPokemonByName(id.toString()).then(transformPokemonData).catch(error => {
+              console.warn(`Failed to fetch Pokemon ${id}:`, error);
               return null;
-            }
-          })
-        );
-        // Deduplicate by id
-        const filtered = details.filter(Boolean) as Pokemon[];
-        const unique = Array.from(
-          new Map(filtered.map((p) => [p.id, p])).values()
-        );
-        regionCache.current[region] = unique;
-        setPokemonList(unique);
-        // Debug: log after fetch
+            })
+          );
+        }
+        
+        const pokemonData = (await Promise.all(pokemonPromises)).filter(Boolean) as Pokemon[];
+        
+        // Sort by ID
+        const sortedPokemon = pokemonData.sort((a, b) => a.id - b.id);
+        
+        setPokemonList(sortedPokemon);
         console.debug(
           `[PokemonContext] ${region} loaded:`,
-          unique.length,
-          unique.slice(0, 5).map((p) => p?.name)
+          sortedPokemon.length,
+          "Pokemon"
         );
       } catch (err: any) {
+        console.error("Error fetching region:", err);
         setError(err.message || "Failed to fetch Pokémon list");
       } finally {
         setLoading(false);
@@ -261,9 +221,11 @@ export const PokemonProvider: React.FC<React.PropsWithChildren> = ({
     setLoading(true);
     setError(null);
     try {
-      const res = await getPokemonByIdOrName(idOrName);
-      setCurrentPokemon(res.data as PokemonDetail);
+      const pokemonData = await P.getPokemonByName(idOrName.toString());
+      const transformedPokemon = await transformPokemonData(pokemonData);
+      setCurrentPokemon(transformedPokemon as PokemonDetail);
     } catch (err: any) {
+      console.error("Error fetching Pokemon detail:", err);
       setError(err.message || "Failed to fetch Pokémon details");
     } finally {
       setLoading(false);
@@ -281,11 +243,12 @@ export const PokemonProvider: React.FC<React.PropsWithChildren> = ({
     if (
       currentRegion === "All Regions" &&
       allRegionsHasMore &&
-      pokemonList.length > 0
+      pokemonList.length > 0 &&
+      pokemonList.length < 1025
     ) {
       const timeout = setTimeout(() => {
         fetchNextAllRegionsPage();
-      }, 3000); // 3 seconds delay between batches
+      }, 2000); // 2 seconds delay between batches
       return () => clearTimeout(timeout);
     }
   }, [pokemonList.length, currentRegion, allRegionsHasMore]);

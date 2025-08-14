@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Pokemon } from "../services/pokedexapi";
-import { fetchWithCache } from "../services/cache";
-import { throttleRequest } from "../services/throttle";
+import { Pokemon, getPokemonByIdOrName } from "../services/pokedexapi";
 
 export interface UsePokemonResult {
   data: Pokemon | null;
@@ -19,10 +17,9 @@ export function usePokemon(idOrName: number | string | null): UsePokemonResult {
     if (!idOrName) return;
     setLoading(true);
     setError(null);
-    const url = `https://pokeapi.co/api/v2/pokemon/${idOrName}`;
     try {
-      const result = await throttleRequest(() => fetchWithCache<Pokemon>(url));
-      setData(result);
+      const result = await getPokemonByIdOrName(idOrName);
+      setData(result.data);
     } catch (err: any) {
       setError(err.message || "Failed to fetch Pokémon");
     } finally {
