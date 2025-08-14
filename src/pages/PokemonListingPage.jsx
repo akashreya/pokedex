@@ -9,6 +9,8 @@ import ToggleSwitch from "../components/ui/ToggleSwitch";
 import PokemonGridLayout from "../components/pokemonlist/PokemonGridLayout";
 import PokemonListLayout from "../components/pokemonlist/PokemonListLayout";
 import ReactGA from "react-ga4";
+import { fuzzySearchPokemon } from "../utils/fuzzySearch";
+import { useFavorites } from "../context/FavoritesContext";
 
 const ALL_TYPES = [
   "normal",
@@ -41,6 +43,7 @@ export default function PokemonListing() {
         sortBy: localStorage.getItem("pokemonSort") || "id-asc",
         selectedTypes: JSON.parse(localStorage.getItem("pokemonTypes")) || [],
         filterRarity: localStorage.getItem("pokemonRarity") || "all",
+        filterEvolution: localStorage.getItem("pokemonEvolution") || "all",
         searchTerm: localStorage.getItem("pokemonSearch") || "",
         heightRange: JSON.parse(localStorage.getItem("pokemonHeightRange")) || [
           0, 300,
@@ -72,6 +75,9 @@ export default function PokemonListing() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState(persisted.selectedTypes);
   const [filterRarity, setFilterRarity] = useState(persisted.filterRarity);
+  const [filterEvolution, setFilterEvolution] = useState(
+    persisted.filterEvolution
+  );
   const [sortBy, setSortBy] = useState(persisted.sortBy);
   const [viewMode, setViewMode] = useState(persisted.viewMode);
   const [searchTerm, setSearchTerm] = useState(persisted.searchTerm);
@@ -79,8 +85,12 @@ export default function PokemonListing() {
   const [heightRange, setHeightRange] = useState(persisted.heightRange);
   const [weightRange, setWeightRange] = useState(persisted.weightRange);
   const [currentPage, setCurrentPage] = useState(persisted.currentPage);
-  const gridItemsPerPage = 10;
-  const listItemsPerPage = 50;
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const gridItemsPerPage = 8;
+  const listItemsPerPage = 48;
+
+  // Use favorites hook
+  const { favorites } = useFavorites();
 
   // Ref for header
   const mainRef = useRef(null);
@@ -133,12 +143,14 @@ export default function PokemonListing() {
   }, [
     selectedTypes,
     filterRarity,
+    filterEvolution,
     heightRange,
     weightRange,
     sortBy,
     viewMode,
     debouncedSearch,
     currentRegion,
+    showFavoritesOnly,
   ]);
 
   // Debounce search
@@ -175,10 +187,11 @@ export default function PokemonListing() {
   const filtered = useMemo(() => {
     let list = [...allPokemon];
     if (debouncedSearch) {
-      const term = debouncedSearch.toLowerCase();
-      list = list.filter(
-        (p) => p.name.toLowerCase().includes(term) || p.id.toString() === term
-      );
+      // Use fuzzy search instead of simple string matching
+      list = fuzzySearchPokemon(list, debouncedSearch, 0.3);
+    }
+    if (showFavoritesOnly) {
+      list = list.filter((p) => favorites.includes(p.id));
     }
     if (selectedTypes.length > 0)
       list = list.filter((p) =>
@@ -186,6 +199,9 @@ export default function PokemonListing() {
       );
     if (filterRarity !== "all")
       list = list.filter((p) => p.rarity === filterRarity);
+    if (filterEvolution !== "all") {
+      list = list.filter((p) => p.evolutionStage === filterEvolution);
+    }
     list = list.filter(
       (p) =>
         !p.height || (p.height >= heightRange[0] && p.height <= heightRange[1])
@@ -206,9 +222,12 @@ export default function PokemonListing() {
     debouncedSearch,
     selectedTypes,
     filterRarity,
+    filterEvolution,
     heightRange,
     weightRange,
     sortBy,
+    showFavoritesOnly,
+    favorites,
   ]);
 
   // Calculate items per page based on view mode
@@ -231,9 +250,11 @@ export default function PokemonListing() {
   function clearFilters() {
     setSelectedTypes([]);
     setFilterRarity("all");
+    setFilterEvolution("all");
     setSearchTerm("");
     setHeightRange([0, 300]);
     setWeightRange([0, 10000]);
+    setShowFavoritesOnly(false);
   }
 
   // Persist state to localStorage on change
@@ -243,6 +264,9 @@ export default function PokemonListing() {
   useEffect(() => {
     localStorage.setItem("pokemonRarity", filterRarity);
   }, [filterRarity]);
+  useEffect(() => {
+    localStorage.setItem("pokemonEvolution", filterEvolution);
+  }, [filterEvolution]);
   useEffect(() => {
     localStorage.setItem("pokemonSort", sortBy);
   }, [sortBy]);
@@ -307,6 +331,8 @@ export default function PokemonListing() {
             setSelectedTypes={setSelectedTypes}
             filterRarity={filterRarity}
             setFilterRarity={setFilterRarity}
+            filterEvolution={filterEvolution}
+            setFilterEvolution={setFilterEvolution}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             heightRange={heightRange}
@@ -316,6 +342,8 @@ export default function PokemonListing() {
             clearFilters={clearFilters}
             onClose={() => setSidebarOpen(false)}
             setCurrentRegion={setCurrentRegion}
+            showFavoritesOnly={showFavoritesOnly}
+            setShowFavoritesOnly={setShowFavoritesOnly}
           />
         </aside>
 

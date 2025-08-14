@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Pokedex } from "pokeapi-js-wrapper";
-import { Pokemon } from "../services/pokedexapi";
+import { Pokemon, EvolutionChain, getEvolutionChain } from "../services/pokedexapi";
 
 interface PokemonDetail extends Pokemon {
   // Extend with more detail fields as needed
@@ -70,10 +70,69 @@ export const PokemonProvider: React.FC<React.PropsWithChildren> = ({
     
     // Rarity from species data
     let rarity = "regular";
+    let evolution_chain_id = null;
+    let has_evolution = false;
+    let evolutionStage: 'basic' | 'stage1' | 'stage2' | null = null;
+
+    // Helper to check if a species can evolve further within the chain
+    const checkIfCanEvolveFurther = (chain: any, pokemonName: string): boolean => {
+      if (chain.species.name === pokemonName) {
+        return chain.evolves_to && chain.evolves_to.length > 0;
+      }
+      for (const evolution of chain.evolves_to) {
+        if (checkIfCanEvolveFurther(evolution, pokemonName)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    // Helper to get the evolution depth of a Pokémon within its chain
+    const getPokemonEvolutionDepth = (chain: any, pokemonName: string, depth: number): number | null => {
+      if (chain.species.name === pokemonName) {
+        return depth;
+      }
+      for (const evolution of chain.evolves_to) {
+        const foundDepth = getPokemonEvolutionDepth(evolution, pokemonName, depth + 1);
+        if (foundDepth !== null) {
+          return foundDepth;
+        }
+      }
+      return null;
+    };
+
     try {
       const species = await P.getPokemonSpeciesByName(pokemonData.name);
       if (species.is_legendary) rarity = "legendary";
       if (species.is_mythical) rarity = "mythical";
+
+      if (species.evolution_chain && species.evolution_chain.url) {
+        const urlParts = species.evolution_chain.url.split('/');
+        evolution_chain_id = parseInt(urlParts[urlParts.length - 2]);
+
+        // Fetch the full evolution chain to determine if it can evolve further and its stage
+        try {
+          const { data: evolutionChainData } = await getEvolutionChain(evolution_chain_id);
+          has_evolution = checkIfCanEvolveFurther(evolutionChainData.chain, pokemonData.name);
+
+          const depth = getPokemonEvolutionDepth(evolutionChainData.chain, pokemonData.name, 0);
+          if (depth !== null) {
+            if (depth === 0) evolutionStage = 'basic';
+            else if (depth === 1) evolutionStage = 'stage1';
+            else if (depth >= 2) evolutionStage = 'stage2'; // Handle chains longer than 2 stages as stage2
+          }
+
+        } catch (evoError) {
+          console.warn(`Failed to fetch evolution chain for ${pokemonData.name} (ID: ${evolution_chain_id}):`, evoError);
+          has_evolution = false; // Assume no further evolution if chain fetch fails
+          evolutionStage = null; // Cannot determine stage if chain fetch fails
+        }
+      }
+
+      // The previous logic for evolutionStage was flawed. It should be solely based on depth.
+      // The has_evolution flag is now correctly determined by checkIfCanEvolveFurther.
+      // No need for the old if/else if/else block here.
+
     } catch (error) {
       console.warn(`Failed to fetch species for ${pokemonData.name}:`, error);
     }
@@ -82,6 +141,9 @@ export const PokemonProvider: React.FC<React.PropsWithChildren> = ({
       ...pokemonData,
       sprite,
       rarity,
+      evolution_chain_id,
+      has_evolution,
+      evolutionStage,
     };
   };
 

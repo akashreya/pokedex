@@ -109,33 +109,6 @@ export default function PokemonTypeGradientOverlay({
           animation: 'gradientShift 12s ease-in-out infinite'
         }}
       />
-
-      {/* CSS for gradient animation */}
-      <style jsx>{`
-        @keyframes gradientShift {
-          0%, 100% {
-            opacity: 0.1;
-            transform: scale(1) rotate(0deg);
-          }
-          50% {
-            opacity: 0.15;
-            transform: scale(1.1) rotate(180deg);
-          }
-        }
-        
-        @media (prefers-color-scheme: dark) {
-          @keyframes gradientShift {
-            0%, 100% {
-              opacity: 0.05;
-              transform: scale(1) rotate(0deg);
-            }
-            50% {
-              opacity: 0.1;
-              transform: scale(1.1) rotate(180deg);
-            }
-          }
-        }
-      `}</style>
     </div>
   );
 }

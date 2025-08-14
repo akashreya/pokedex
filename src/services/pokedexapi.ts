@@ -77,6 +77,9 @@ export interface Pokemon {
   }[];
   sprite?: string;
   rarity?: string;
+  evolution_chain_id?: number | null;
+  has_evolution?: boolean;
+  evolutionStage?: 'basic' | 'stage1' | 'stage2' | null;
 }
 
 export interface PokemonTypeInfo {
