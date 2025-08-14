@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { PokemonListResponse } from "../services/pokedexapi";
-import { fetchWithCache } from "../services/cache";
-import { throttleRequest } from "../services/throttle";
+import { PokemonListResponse, getPokemonList } from "../services/pokedexapi";
 
 export interface UsePokemonsResult {
   data: PokemonListResponse | null;
@@ -25,11 +23,10 @@ export function usePokemons(): UsePokemonsResult {
     setLoading(true);
     setError(null);
     const offset = (page - 1) * PAGE_SIZE;
-    const url = `https://pokeapi.co/api/v2/pokemon?limit=${PAGE_SIZE}&offset=${offset}`;
     try {
-      // Use cache and throttle for performance
-      const result = await throttleRequest(() => fetchWithCache<PokemonListResponse>(url));
-      setData(result);
+      // Use wrapper with automatic caching
+      const result = await getPokemonList(PAGE_SIZE, offset);
+      setData(result.data);
     } catch (err: any) {
       setError(err.message || "Failed to fetch Pokémon list");
     } finally {

@@ -1,4 +1,11 @@
-import { fetchFromApi, ApiResponse } from "./api";
+import { Pokedex } from "pokeapi-js-wrapper";
+
+// Initialize PokeAPI wrapper with caching
+const P = new Pokedex({
+  cache: true,
+  timeout: 5000,
+  cacheImages: true,
+});
 
 // --- TypeScript interfaces for endpoint responses ---
 
@@ -68,6 +75,8 @@ export interface Pokemon {
     is_hidden: boolean;
     slot: number;
   }[];
+  sprite?: string;
+  rarity?: string;
 }
 
 export interface PokemonTypeInfo {
@@ -97,35 +106,60 @@ export interface RegionInfo {
   // ...add more fields as needed
 }
 
-// --- Endpoint functions ---
+// --- Wrapper-based endpoint functions ---
 
-export async function getPokemonList(limit = 30, offset = 0): Promise<ApiResponse<PokemonListResponse>> {
+export async function getPokemonList(limit = 30, offset = 0): Promise<{ data: PokemonListResponse }> {
   if (limit < 1 || limit > 1000) throw new Error("Limit must be between 1 and 1000");
   if (offset < 0) throw new Error("Offset must be >= 0");
-  const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
-  return fetchFromApi<PokemonListResponse>(url);
+  
+  try {
+    const response = await P.getPokemonsList({ limit, offset });
+    return { data: response };
+  } catch (error) {
+    throw new Error(`Failed to fetch Pokemon list: ${error}`);
+  }
 }
 
-export async function getPokemonByIdOrName(idOrName: number | string): Promise<ApiResponse<Pokemon>> {
+export async function getPokemonByIdOrName(idOrName: number | string): Promise<{ data: Pokemon }> {
   if (!idOrName) throw new Error("idOrName is required");
-  const url = `https://pokeapi.co/api/v2/pokemon/${idOrName}`;
-  return fetchFromApi<Pokemon>(url);
+  
+  try {
+    const pokemon = await P.getPokemonByName(idOrName.toString());
+    return { data: pokemon };
+  } catch (error) {
+    throw new Error(`Failed to fetch Pokemon ${idOrName}: ${error}`);
+  }
 }
 
-export async function getPokemonTypeInfo(type: string): Promise<ApiResponse<PokemonTypeInfo>> {
+export async function getPokemonTypeInfo(type: string): Promise<{ data: PokemonTypeInfo }> {
   if (!type) throw new Error("type is required");
-  const url = `https://pokeapi.co/api/v2/type/${type}`;
-  return fetchFromApi<PokemonTypeInfo>(url);
+  
+  try {
+    const typeInfo = await P.getTypeByName(type);
+    return { data: typeInfo };
+  } catch (error) {
+    throw new Error(`Failed to fetch type info for ${type}: ${error}`);
+  }
 }
 
-export async function getEvolutionChain(id: number): Promise<ApiResponse<EvolutionChain>> {
+export async function getEvolutionChain(id: number): Promise<{ data: EvolutionChain }> {
   if (!id || id < 1) throw new Error("Valid evolution chain id is required");
-  const url = `https://pokeapi.co/api/v2/evolution-chain/${id}`;
-  return fetchFromApi<EvolutionChain>(url);
+  
+  try {
+    const evolutionChain = await P.getEvolutionChainById(id);
+    return { data: evolutionChain };
+  } catch (error) {
+    throw new Error(`Failed to fetch evolution chain ${id}: ${error}`);
+  }
 }
 
-export async function getRegionInfo(region: string): Promise<ApiResponse<RegionInfo>> {
+export async function getRegionInfo(region: string): Promise<{ data: RegionInfo }> {
   if (!region) throw new Error("region is required");
-  const url = `https://pokeapi.co/api/v2/region/${region}`;
-  return fetchFromApi<RegionInfo>(url);
+  
+  try {
+    const regionInfo = await P.getRegionByName(region);
+    return { data: regionInfo };
+  } catch (error) {
+    throw new Error(`Failed to fetch region info for ${region}: ${error}`);
+  }
 } 
